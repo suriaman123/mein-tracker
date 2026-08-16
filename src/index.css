@@ -2,7 +2,33 @@
   box-sizing: border-box;
 }
 
+:root {
+  /* -- Quiet Hours palette -- */
+  --ink: #14172B;
+  --surface: #1E2242;
+  --surface-raised: #262B4E;
+  --border: #34395F;
+  --text: #F1EFEA;
+  --text-muted: #9498B3;
+  --accent: #8FA3F3;
+  --accent-soft: rgba(143, 163, 243, 0.15);
+  --error: #F2777A;
+
+  --font-display: 'Fraunces', serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
+  background: var(--ink);
+  color: var(--text);
+}
+
+button {
+  font-family: inherit;
+}
+
+a {
+  color: var(--accent);
 }
