@@ -1,12 +1,17 @@
-import Layout from '../components/Layout'
+import TrackerPage from '../components/TrackerPage'
 
 export default function Study() {
   return (
-    <Layout>
-      <div className="overview-header">
-        <h1>Study hours tracker</h1>
-        <p>Logging, editing, and history land in Chunk 6.</p>
-      </div>
-    </Layout>
+    <TrackerPage
+      title="Study hours tracker"
+      table="study_logs"
+      valueField="hours"
+      unit="hrs"
+      valueLabel="Hours studied"
+      accentClass="accent-study"
+      min={0}
+      max={24}
+      step={0.25}
+    />
   )
 }
