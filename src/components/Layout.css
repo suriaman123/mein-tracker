@@ -39,6 +39,17 @@
   display: flex;
   gap: 0.25rem;
   flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.topnav::-webkit-scrollbar {
+  display: none;
+}
+
+.topnav a {
+  white-space: nowrap;
 }
 
 .topnav a {

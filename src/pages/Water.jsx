@@ -1,12 +1,17 @@
-import Layout from '../components/Layout'
+import TrackerPage from '../components/TrackerPage'
 
 export default function Water() {
   return (
-    <Layout>
-      <div className="overview-header">
-        <h1>Water intake tracker</h1>
-        <p>Logging, editing, and history land in Chunk 5.</p>
-      </div>
-    </Layout>
+    <TrackerPage
+      title="Water intake tracker"
+      table="water_logs"
+      valueField="liters"
+      unit="L"
+      valueLabel="Liters drunk"
+      accentClass="accent-water"
+      min={0}
+      max={15}
+      step={0.1}
+    />
   )
 }
