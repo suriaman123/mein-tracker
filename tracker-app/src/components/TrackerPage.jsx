@@ -2,10 +2,17 @@ import { useState } from 'react'
 import { useAuth } from '../lib/AuthContext'
 import { useMonthlyStats } from '../lib/useMonthlyStats'
 import { saveLog, deleteLog } from '../lib/trackerCrud'
+import TrendChart from './TrendChart'
 import Layout from './Layout'
 import './TrackerPage.css'
 
 const today = () => new Date().toISOString().slice(0, 10)
+
+const ACCENT_COLORS = {
+  'accent-sleep': '#8FA3F3',
+  'accent-water': '#6FCF97',
+  'accent-study': '#F2C94C',
+}
 
 function formatDate(dateStr) {
   return new Date(dateStr + 'T00:00:00').toLocaleDateString('default', {
@@ -161,45 +168,57 @@ export default function TrackerPage({
           </button>
         </form>
 
-        <div className="tracker-list">
-          <h2>This month</h2>
+        <div className="tracker-right-col">
+          <div className="tracker-chart-card">
+            <h2>This month's trend</h2>
+            <TrendChart
+              logs={stats.logs}
+              valueField={valueField}
+              unit={unit}
+              accentColor={ACCENT_COLORS[accentClass]}
+            />
+          </div>
 
-          {stats.loading ? (
-            <p className="tracker-empty">Loading…</p>
-          ) : stats.logs.length === 0 ? (
-            <p className="tracker-empty">Nothing logged yet — add your first entry.</p>
-          ) : (
-            <ul className="log-list">
-              {stats.logs.map((entry) => (
-                <li key={entry.id} className="log-row">
-                  <div className="log-row-main">
-                    <span className="log-date">{formatDate(entry.log_date)}</span>
-                    <span className="log-value">
-                      {Number(entry[valueField]).toFixed(2)} {unit}
-                    </span>
-                  </div>
-                  {entry.notes && <div className="log-notes">{entry.notes}</div>}
-                  <div className="log-row-actions">
-                    <button
-                      type="button"
-                      className="log-action-btn"
-                      onClick={() => loadEntryIntoForm(entry)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      type="button"
-                      className="log-action-btn log-action-danger"
-                      disabled={deletingId === entry.id}
-                      onClick={() => handleDelete(entry.id)}
-                    >
-                      {deletingId === entry.id ? 'Deleting…' : 'Delete'}
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
+          <div className="tracker-list">
+            <h2>Entries</h2>
+
+            {stats.loading ? (
+              <p className="tracker-empty">Loading…</p>
+            ) : stats.logs.length === 0 ? (
+              <p className="tracker-empty">Nothing logged yet — add your first entry.</p>
+            ) : (
+              <ul className="log-list">
+                {stats.logs.map((entry) => (
+                  <li key={entry.id} className="log-row">
+                    <div className="log-row-main">
+                      <span className="log-date">{formatDate(entry.log_date)}</span>
+                      <span className="log-value">
+                        {Number(entry[valueField]).toFixed(2)} {unit}
+                      </span>
+                    </div>
+                    {entry.notes && <div className="log-notes">{entry.notes}</div>}
+                    <div className="log-row-actions">
+                      <button
+                        type="button"
+                        className="log-action-btn"
+                        onClick={() => loadEntryIntoForm(entry)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        className="log-action-btn log-action-danger"
+                        disabled={deletingId === entry.id}
+                        onClick={() => handleDelete(entry.id)}
+                      >
+                        {deletingId === entry.id ? 'Deleting…' : 'Delete'}
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
       </div>
     </Layout>
