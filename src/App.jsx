@@ -5,8 +5,16 @@ import Dashboard from './pages/Dashboard'
 import Sleep from './pages/Sleep'
 import Water from './pages/Water'
 import Study from './pages/Study'
+import SleepHistory from './pages/SleepHistory'
+import WaterHistory from './pages/WaterHistory'
+import StudyHistory from './pages/StudyHistory'
+import Profile from './pages/Profile'
 import ProtectedRoute from './components/ProtectedRoute'
 import './App.css'
+
+function protect(element) {
+  return <ProtectedRoute>{element}</ProtectedRoute>
+}
 
 function App() {
   return (
@@ -14,38 +22,14 @@ function App() {
       <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/sleep"
-        element={
-          <ProtectedRoute>
-            <Sleep />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/water"
-        element={
-          <ProtectedRoute>
-            <Water />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/study"
-        element={
-          <ProtectedRoute>
-            <Study />
-          </ProtectedRoute>
-        }
-      />
+      <Route path="/dashboard" element={protect(<Dashboard />)} />
+      <Route path="/sleep" element={protect(<Sleep />)} />
+      <Route path="/water" element={protect(<Water />)} />
+      <Route path="/study" element={protect(<Study />)} />
+      <Route path="/sleep/history" element={protect(<SleepHistory />)} />
+      <Route path="/water/history" element={protect(<WaterHistory />)} />
+      <Route path="/study/history" element={protect(<StudyHistory />)} />
+      <Route path="/profile" element={protect(<Profile />)} />
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   )

@@ -12,6 +12,7 @@ export default function Sleep() {
       min={0}
       max={24}
       step={0.25}
+      historyPath="/sleep/history"
     />
   )
 }

@@ -1,10 +1,8 @@
 import { NavLink } from 'react-router-dom'
-import { useAuth } from '../lib/AuthContext'
+import AvatarMenu from './AvatarMenu'
 import './Layout.css'
 
 export default function Layout({ children }) {
-  const { user, signOut } = useAuth()
-
   return (
     <div className="layout">
       <header className="topbar">
@@ -28,10 +26,7 @@ export default function Layout({ children }) {
           </nav>
 
           <div className="topbar-user">
-            <span className="user-email">{user?.email}</span>
-            <button className="signout-btn" onClick={signOut}>
-              Sign out
-            </button>
+            <AvatarMenu />
           </div>
         </div>
       </header>

@@ -12,6 +12,7 @@ export default function Water() {
       min={0}
       max={15}
       step={0.1}
+      historyPath="/water/history"
     />
   )
 }

@@ -11,18 +11,18 @@
   max-width: 1080px;
   margin: 0 auto;
   padding: 0 1.5rem;
-  height: 64px;
+  height: 68px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.7rem;
   flex-shrink: 0;
+  margin-right: auto;
 }
 
 .brand .phase-dots {
@@ -31,17 +31,18 @@
 
 .brand-name {
   font-family: var(--font-display);
-  font-size: 1.15rem;
-  font-weight: 500;
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .topnav {
   display: flex;
   gap: 0.25rem;
-  flex: 1;
   min-width: 0;
   overflow-x: auto;
   scrollbar-width: none;
+  flex-shrink: 0;
 }
 
 .topnav::-webkit-scrollbar {
@@ -50,9 +51,6 @@
 
 .topnav a {
   white-space: nowrap;
-}
-
-.topnav a {
   color: var(--text-muted);
   text-decoration: none;
   font-size: 0.9rem;
@@ -74,35 +72,8 @@
 .topbar-user {
   display: flex;
   align-items: center;
-  gap: 0.9rem;
   flex-shrink: 0;
-}
-
-.user-email {
-  color: var(--text-muted);
-  font-size: 0.85rem;
-  display: none;
-}
-
-@media (min-width: 640px) {
-  .user-email {
-    display: inline;
-  }
-}
-
-.signout-btn {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text);
-  border-radius: 8px;
-  padding: 0.45rem 0.8rem;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: border-color 0.15s ease;
-}
-
-.signout-btn:hover {
-  border-color: var(--accent);
+  margin-left: auto;
 }
 
 .layout-content {

@@ -1,0 +1,79 @@
+.avatar-menu {
+  position: relative;
+}
+
+.avatar-trigger {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface-raised);
+  padding: 0;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s ease;
+}
+
+.avatar-trigger:hover {
+  border-color: var(--accent);
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-initials {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.avatar-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.4rem;
+  min-width: 220px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  z-index: 20;
+}
+
+.avatar-dropdown-email {
+  padding: 0.6rem 0.7rem 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.3rem;
+  word-break: break-all;
+}
+
+.avatar-dropdown-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 0.88rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: var(--font-body);
+}
+
+.avatar-dropdown-item:hover {
+  background: var(--surface-raised);
+}
+
+.avatar-dropdown-danger {
+  color: var(--error);
+}

@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { HashRouter } from 'react-router-dom'
 import { AuthProvider } from './lib/AuthContext'
+import { ThemeProvider } from './lib/ThemeContext'
 import './index.css'
 import App from './App.jsx'
 
@@ -12,10 +13,12 @@ import App from './App.jsx'
 // resolves correctly with zero extra config.
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <HashRouter>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </HashRouter>
+    <ThemeProvider>
+      <HashRouter>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </HashRouter>
+    </ThemeProvider>
   </StrictMode>,
 )

@@ -2,8 +2,9 @@
   box-sizing: border-box;
 }
 
-:root {
-  /* -- Quiet Hours palette -- */
+:root,
+[data-theme='dark'] {
+  /* -- Quiet Hours palette (dark) -- */
   --ink: #14172B;
   --surface: #1E2242;
   --surface-raised: #262B4E;
@@ -18,11 +19,25 @@
   --font-body: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
+[data-theme='light'] {
+  /* -- Quiet Hours palette (light) -- */
+  --ink: #F5F3EE;
+  --surface: #FFFFFF;
+  --surface-raised: #F0EEE8;
+  --border: #E1DED4;
+  --text: #1E2242;
+  --text-muted: #6C7089;
+  --accent: #5C6FD8;
+  --accent-soft: rgba(92, 111, 216, 0.1);
+  --error: #D9534F;
+}
+
 body {
   margin: 0;
   font-family: var(--font-body);
   background: var(--ink);
   color: var(--text);
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
 button {

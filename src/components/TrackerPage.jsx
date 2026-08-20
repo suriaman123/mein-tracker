@@ -1,10 +1,12 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useAuth } from '../lib/AuthContext'
 import { useMonthlyStats } from '../lib/useMonthlyStats'
 import { saveLog, deleteLog } from '../lib/trackerCrud'
 import TrendChart from './TrendChart'
 import Layout from './Layout'
 import './TrackerPage.css'
+import './TrackerHistory.css'
 
 const today = () => new Date().toISOString().slice(0, 10)
 
@@ -34,6 +36,7 @@ export default function TrackerPage({
   max = 24,
   step = 0.25,
   valueLabel,
+  historyPath,
 }) {
   const { user } = useAuth()
   const stats = useMonthlyStats(table, valueField)
@@ -44,6 +47,7 @@ export default function TrackerPage({
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [deletingId, setDeletingId] = useState(null)
+  const [savedMessage, setSavedMessage] = useState('')
 
   function loadEntryIntoForm(entry) {
     setLogDate(entry.log_date)
@@ -85,8 +89,17 @@ export default function TrackerPage({
       return
     }
 
+    const savedDateLabel = formatDate(logDate)
     resetForm()
     stats.refresh()
+
+    setSavedMessage(
+      `Saved entry for ${savedDateLabel}.` +
+        (logDate.slice(0, 7) !== today().slice(0, 7)
+          ? ' Since that date is outside this month, view it in "See all data".'
+          : '')
+    )
+    setTimeout(() => setSavedMessage(''), 5000)
   }
 
   async function handleDelete(id, dateLabel) {
@@ -108,13 +121,20 @@ export default function TrackerPage({
 
   return (
     <Layout>
-      <div className="overview-header">
-        <h1>{title}</h1>
-        <p>
-          {stats.count === 0
-            ? 'No entries yet this month.'
-            : `This month's average: ${stats.average.toFixed(1)} ${unit} over ${stats.count} ${stats.count === 1 ? 'entry' : 'entries'}.`}
-        </p>
+      <div className="overview-header history-header">
+        <div>
+          <h1>{title}</h1>
+          <p>
+            {stats.count === 0
+              ? 'No entries yet this month.'
+              : `This month's average: ${stats.average.toFixed(1)} ${unit} over ${stats.count} ${stats.count === 1 ? 'entry' : 'entries'}.`}
+          </p>
+        </div>
+        {historyPath && (
+          <Link to={historyPath} className="history-btn">
+            See all data →
+          </Link>
+        )}
       </div>
 
       <div className={`tracker-layout ${accentClass}`}>
@@ -122,6 +142,7 @@ export default function TrackerPage({
           <h2>{existingEntryForDate ? 'Edit entry' : 'Log an entry'}</h2>
 
           {error && <div className="auth-error">{error}</div>}
+          {savedMessage && <div className="auth-success">{savedMessage}</div>}
           {existingEntryForDate && (
             <div className="tracker-form-notice">
               You already have an entry for this date — saving will update it.
