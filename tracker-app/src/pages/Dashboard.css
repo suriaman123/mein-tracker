@@ -1,0 +1,117 @@
+.overview-header {
+  margin-bottom: 2rem;
+}
+
+.overview-header h1 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.9rem;
+  margin: 0 0 0.35rem;
+}
+
+.overview-header p {
+  color: var(--text-muted);
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.summary-card {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  text-decoration: none;
+  color: var(--text);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.summary-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--card-accent, var(--accent));
+}
+
+.summary-card:hover {
+  border-color: var(--card-accent, var(--accent));
+  transform: translateY(-2px);
+}
+
+.summary-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.summary-card-title {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.summary-card-arrow {
+  color: var(--text-muted);
+  transition: transform 0.15s ease;
+}
+
+.summary-card:hover .summary-card-arrow {
+  transform: translateX(3px);
+  color: var(--card-accent, var(--accent));
+}
+
+.summary-card-average {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 500;
+  line-height: 1;
+  margin-bottom: 0.6rem;
+}
+
+.summary-card-unit {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin-left: 0.35rem;
+}
+
+.summary-card-meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.summary-card-loading,
+.summary-card-error {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  padding: 0.5rem 0;
+}
+
+.summary-card-error {
+  color: var(--error);
+}
+
+/* Per-tracker accent colors */
+.accent-sleep {
+  --card-accent: #8FA3F3;
+}
+
+.accent-water {
+  --card-accent: #6FCF97;
+}
+
+.accent-study {
+  --card-accent: #F2C94C;
+}
