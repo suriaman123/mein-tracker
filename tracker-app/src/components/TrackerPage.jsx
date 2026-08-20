@@ -89,7 +89,10 @@ export default function TrackerPage({
     stats.refresh()
   }
 
-  async function handleDelete(id) {
+  async function handleDelete(id, dateLabel) {
+    const confirmed = window.confirm(`Delete the entry for ${dateLabel}? This can't be undone.`)
+    if (!confirmed) return
+
     setDeletingId(id)
     const { error } = await deleteLog(table, id)
     setDeletingId(null)
@@ -209,7 +212,7 @@ export default function TrackerPage({
                         type="button"
                         className="log-action-btn log-action-danger"
                         disabled={deletingId === entry.id}
-                        onClick={() => handleDelete(entry.id)}
+                        onClick={() => handleDelete(entry.id, formatDate(entry.log_date))}
                       >
                         {deletingId === entry.id ? 'Deleting…' : 'Delete'}
                       </button>
