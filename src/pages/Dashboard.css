@@ -115,3 +115,7 @@
 .accent-study {
   --card-accent: #F2C94C;
 }
+
+.accent-hidden {
+  --card-accent: #FF7A00;
+}

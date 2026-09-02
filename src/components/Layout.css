@@ -81,3 +81,13 @@
   margin: 0 auto;
   padding: 2.5rem 1.5rem;
 }
+
+/* Easter egg theme: brand + nav items glow orange */
+[data-hidden='true'] .brand-name,
+[data-hidden='true'] .topnav a {
+  color: #FF7A00;
+}
+
+[data-hidden='true'] .topnav a.active {
+  background: rgba(255, 122, 0, 0.15);
+}

@@ -1,8 +1,11 @@
 import { NavLink } from 'react-router-dom'
 import AvatarMenu from './AvatarMenu'
+import { useHiddenMode } from '../lib/HiddenModeContext'
 import './Layout.css'
 
 export default function Layout({ children }) {
+  const { hidden } = useHiddenMode()
+
   return (
     <div className="layout">
       <header className="topbar">
@@ -23,6 +26,7 @@ export default function Layout({ children }) {
             <NavLink to="/sleep">Sleep</NavLink>
             <NavLink to="/water">Water</NavLink>
             <NavLink to="/study">Study</NavLink>
+            {hidden && <NavLink to="/personal">हस्तमैथुन</NavLink>}
           </nav>
 
           <div className="topbar-user">

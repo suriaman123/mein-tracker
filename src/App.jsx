@@ -8,6 +8,8 @@ import Study from './pages/Study'
 import SleepHistory from './pages/SleepHistory'
 import WaterHistory from './pages/WaterHistory'
 import StudyHistory from './pages/StudyHistory'
+import Personal from './pages/Personal'
+import PersonalHistory from './pages/PersonalHistory'
 import Profile from './pages/Profile'
 import ProtectedRoute from './components/ProtectedRoute'
 import './App.css'
@@ -29,6 +31,8 @@ function App() {
       <Route path="/sleep/history" element={protect(<SleepHistory />)} />
       <Route path="/water/history" element={protect(<WaterHistory />)} />
       <Route path="/study/history" element={protect(<StudyHistory />)} />
+      <Route path="/personal" element={protect(<Personal />)} />
+      <Route path="/personal/history" element={protect(<PersonalHistory />)} />
       <Route path="/profile" element={protect(<Profile />)} />
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>

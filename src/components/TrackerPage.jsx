@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../lib/AuthContext'
 import { useMonthlyStats } from '../lib/useMonthlyStats'
 import { saveLog, deleteLog } from '../lib/trackerCrud'
@@ -14,6 +14,7 @@ const ACCENT_COLORS = {
   'accent-sleep': '#8FA3F3',
   'accent-water': '#6FCF97',
   'accent-study': '#F2C94C',
+  'accent-hidden': '#FF7A00',
 }
 
 function formatDate(dateStr) {
@@ -40,6 +41,8 @@ export default function TrackerPage({
 }) {
   const { user } = useAuth()
   const stats = useMonthlyStats(table, valueField)
+  const location = useLocation()
+  const navigate = useNavigate()
 
   const [logDate, setLogDate] = useState(today())
   const [value, setValue] = useState('')
@@ -48,6 +51,21 @@ export default function TrackerPage({
   const [error, setError] = useState('')
   const [deletingId, setDeletingId] = useState(null)
   const [savedMessage, setSavedMessage] = useState('')
+
+  // If we arrived here via the "Edit" button on the yearly history table,
+  // prefill the form with that entry — works for any month, not just this one.
+  useEffect(() => {
+    const prefill = location.state?.prefill
+    if (prefill) {
+      setLogDate(prefill.log_date)
+      setValue(String(prefill[valueField]))
+      setNotes(prefill.notes || '')
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      // Clear the navigation state so refreshing this page doesn't re-trigger it
+      navigate(location.pathname, { replace: true, state: {} })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.state])
 
   function loadEntryIntoForm(entry) {
     setLogDate(entry.log_date)
