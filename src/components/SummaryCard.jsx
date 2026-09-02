@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function SummaryCard({
   title,
@@ -9,7 +9,21 @@ export default function SummaryCard({
   error,
   to,
   accentClass,
+  goal,
+  streak = 0,
 }) {
+  const navigate = useNavigate()
+  const numericGoal = goal !== null && goal !== undefined && goal !== '' ? Number(goal) : null
+  const hasGoal = numericGoal !== null && !Number.isNaN(numericGoal) && numericGoal > 0
+  const progressPercent = hasGoal && count > 0 ? Math.min(100, (average / numericGoal) * 100) : 0
+  const metGoal = hasGoal && average >= numericGoal
+
+  function goToProfile(e) {
+    e.preventDefault()
+    e.stopPropagation()
+    navigate('/profile')
+  }
+
   return (
     <Link to={to} className={`summary-card ${accentClass}`}>
       <div className="summary-card-top">
@@ -32,6 +46,32 @@ export default function SummaryCard({
               ? 'No entries yet this month'
               : `avg over ${count} ${count === 1 ? 'entry' : 'entries'} this month`}
           </div>
+
+          {streak > 0 && (
+            <div className="summary-card-streak">🔥 {streak}-day streak</div>
+          )}
+
+          {hasGoal && count > 0 && (
+            <div className="summary-card-goal">
+              <div className="goal-bar-track">
+                <div
+                  className={`goal-bar-fill${metGoal ? ' goal-bar-met' : ''}`}
+                  style={{ width: `${progressPercent}%` }}
+                />
+              </div>
+              <div className="goal-bar-label">
+                {metGoal
+                  ? `Goal reached (${numericGoal} ${unit})`
+                  : `${Math.round(progressPercent)}% of ${numericGoal} ${unit} goal`}
+              </div>
+            </div>
+          )}
+
+          {!hasGoal && (
+            <span className="summary-card-set-goal" onClick={goToProfile}>
+              Set a goal
+            </span>
+          )}
         </>
       )}
     </Link>

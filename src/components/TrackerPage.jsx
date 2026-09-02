@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../lib/AuthContext'
 import { useMonthlyStats } from '../lib/useMonthlyStats'
+import { useStreak } from '../lib/useStreak'
 import { saveLog, deleteLog } from '../lib/trackerCrud'
 import TrendChart from './TrendChart'
 import Layout from './Layout'
@@ -41,6 +42,7 @@ export default function TrackerPage({
 }) {
   const { user } = useAuth()
   const stats = useMonthlyStats(table, valueField)
+  const streakInfo = useStreak(table)
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -110,6 +112,7 @@ export default function TrackerPage({
     const savedDateLabel = formatDate(logDate)
     resetForm()
     stats.refresh()
+    streakInfo.refresh()
 
     setSavedMessage(
       `Saved entry for ${savedDateLabel}.` +
@@ -133,6 +136,7 @@ export default function TrackerPage({
       return
     }
     stats.refresh()
+    streakInfo.refresh()
   }
 
   const existingEntryForDate = stats.logs.find((l) => l.log_date === logDate)
@@ -146,6 +150,7 @@ export default function TrackerPage({
             {stats.count === 0
               ? 'No entries yet this month.'
               : `This month's average: ${stats.average.toFixed(1)} ${unit} over ${stats.count} ${stats.count === 1 ? 'entry' : 'entries'}.`}
+            {streakInfo.streak > 0 && ` 🔥 ${streakInfo.streak}-day streak.`}
           </p>
         </div>
         {historyPath && (

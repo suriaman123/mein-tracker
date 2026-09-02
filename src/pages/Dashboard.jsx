@@ -1,5 +1,7 @@
 import { useAuth } from '../lib/AuthContext'
 import { useMonthlyStats } from '../lib/useMonthlyStats'
+import { useProfile } from '../lib/useProfile'
+import { useStreak } from '../lib/useStreak'
 import Layout from '../components/Layout'
 import SummaryCard from '../components/SummaryCard'
 import './Dashboard.css'
@@ -8,9 +10,14 @@ const MONTH_NAME = new Date().toLocaleString('default', { month: 'long' })
 
 export default function Dashboard() {
   const { user } = useAuth()
+  const { profile } = useProfile()
   const sleep = useMonthlyStats('sleep_logs', 'hours')
   const water = useMonthlyStats('water_logs', 'liters')
   const study = useMonthlyStats('study_logs', 'hours')
+
+  const sleepStreak = useStreak('sleep_logs')
+  const waterStreak = useStreak('water_logs')
+  const studyStreak = useStreak('study_logs')
 
   const firstName = user?.email?.split('@')[0]
 
@@ -31,6 +38,8 @@ export default function Dashboard() {
           error={sleep.error}
           to="/sleep"
           accentClass="accent-sleep"
+          goal={profile?.goal_sleep_hours}
+          streak={sleepStreak.streak}
         />
         <SummaryCard
           title="Water intake"
@@ -41,6 +50,8 @@ export default function Dashboard() {
           error={water.error}
           to="/water"
           accentClass="accent-water"
+          goal={profile?.goal_water_liters}
+          streak={waterStreak.streak}
         />
         <SummaryCard
           title="Study time"
@@ -51,6 +62,8 @@ export default function Dashboard() {
           error={study.error}
           to="/study"
           accentClass="accent-study"
+          goal={profile?.goal_study_hours}
+          streak={studyStreak.streak}
         />
       </div>
     </Layout>

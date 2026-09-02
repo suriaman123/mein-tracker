@@ -25,3 +25,15 @@ createRoot(document.getElementById('root')).render(
     </ThemeProvider>
   </StrictMode>,
 )
+
+// Register the service worker (production only) — enables "Add to Home
+// Screen" / install prompts and lets the app open (with cached data views)
+// even without a connection. Registered with a relative path so it resolves
+// correctly whether hosted at a domain root or a GitHub Pages subpath.
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch((err) => {
+      console.error('Service worker registration failed:', err)
+    })
+  })
+}
