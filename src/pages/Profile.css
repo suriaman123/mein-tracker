@@ -106,3 +106,13 @@
 .profile-submit {
   max-width: 220px;
 }
+
+@media (max-width: 480px) {
+  .profile-field-row {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-submit {
+    max-width: 100%;
+  }
+}

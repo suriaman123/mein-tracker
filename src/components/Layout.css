@@ -82,6 +82,44 @@
   padding: 2.5rem 1.5rem;
 }
 
+/* Mobile: brand + avatar on one row, nav gets its own full-width
+   scrollable row below — cramming everything into one row was the
+   main cause of an unusable nav on phones. */
+@media (max-width: 700px) {
+  .topbar-inner {
+    height: auto;
+    flex-wrap: wrap;
+    padding: 0.7rem 1rem 0;
+    gap: 0.5rem 1rem;
+    row-gap: 0.6rem;
+  }
+
+  .brand {
+    order: 1;
+  }
+
+  .topbar-user {
+    order: 2;
+  }
+
+  .topnav {
+    order: 3;
+    flex-basis: 100%;
+    padding-bottom: 0.6rem;
+    margin: 0 -1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .brand-name {
+    font-size: 1.2rem;
+  }
+
+  .layout-content {
+    padding: 1.5rem 1rem;
+  }
+}
+
 /* Easter egg theme: brand + nav items glow orange */
 [data-hidden='true'] .brand-name,
 [data-hidden='true'] .topnav a {
