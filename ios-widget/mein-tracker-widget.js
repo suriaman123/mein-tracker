@@ -171,7 +171,10 @@ function buildWidget(stats, errorMessage) {
   footer.textColor = MUTED_COLOR
 
   widget.url = 'https://suriaman123.github.io/mein-tracker/#/dashboard'
-  widget.refreshAfterDate = new Date(Date.now() + 30 * 60 * 1000) // refresh in ~30 min
+  // widget.refreshAfterDate = new Date(Date.now() + 30 * 60 * 1000) // refresh in 30 min
+  widget.refreshAfterDate = new Date(Date.now() + 12 * 60 * 60 * 1000) // refresh in 12 hours
+
+
 
 
   Script.setWidget(widget)
