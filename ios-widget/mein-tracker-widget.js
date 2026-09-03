@@ -1,7 +1,8 @@
-
+// Mein Tracker — iOS Home Screen Widget
 
 const SUPABASE_URL = 'https://ylfmmuxcsarmylwmzmby.supabase.co'
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlsZm1tdXhjc2FybXlsd216bWJ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3NzI0MzIsImV4cCI6MjEwMjM0ODQzMn0.v41jjNE9qZn9n5g06kLkH3wtGspl6FPVFvej6XG5amU'
+
 
 const TRACKERS = [
   { table: 'sleep_logs', field: 'hours', label: 'Sleep', unit: 'hrs', color: '#8FA3F3' },
@@ -169,19 +170,32 @@ function buildWidget(stats, errorMessage) {
   footer.font = Font.systemFont(9)
   footer.textColor = MUTED_COLOR
 
-  widget.url = 'https://suriaman123.github.io/mein-tracker/#/dashboard' 
+  widget.url = 'https://YOUR-USERNAME.github.io/YOUR-REPO/#/dashboard' // <-- fill in
   widget.refreshAfterDate = new Date(Date.now() + 30 * 60 * 1000) // refresh in ~30 min
+
 
   Script.setWidget(widget)
 }
 
 async function run() {
   try {
+    console.log('Step 1: getting credentials...')
     const { email, password } = await getCredentials()
+    console.log(`Step 1 done. Email: ${email}`)
+
+    console.log('Step 2: logging in to Supabase...')
     const accessToken = await login(email, password)
+    console.log('Step 2 done. Got access token: ' + (accessToken ? 'yes' : 'no'))
+
+    console.log('Step 3: fetching stats...')
     const stats = await fetchAllStats(accessToken)
+    console.log('Step 3 done. Stats: ' + JSON.stringify(stats))
+
+    console.log('Step 4: building widget...')
     buildWidget(stats, null)
+    console.log('Step 4 done. Widget should now preview below.')
   } catch (err) {
+    console.error('FAILED: ' + err.message)
     buildWidget([], `Error: ${err.message}`)
   }
   Script.complete()
