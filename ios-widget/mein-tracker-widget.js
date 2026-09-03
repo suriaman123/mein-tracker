@@ -169,7 +169,7 @@ function buildWidget(stats, errorMessage) {
   footer.font = Font.systemFont(9)
   footer.textColor = MUTED_COLOR
 
-  widget.url = 'https://YOUR-USERNAME.github.io/YOUR-REPO/#/dashboard' // <-- fill in
+  widget.url = 'https://suriaman123.github.io/mein-tracker/#/dashboard' 
   widget.refreshAfterDate = new Date(Date.now() + 30 * 60 * 1000) // refresh in ~30 min
 
   Script.setWidget(widget)
