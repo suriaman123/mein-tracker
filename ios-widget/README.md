@@ -28,6 +28,9 @@ It can't log new entries — for that, you still open the actual web app.
    screen → **Edit Widget** → under **Script**, choose `Mein Tracker`.
 
 Done — it'll refresh periodically (iOS decides the exact interval, this
-script hints ~30 minutes) and shows fresh averages each time you glance
+script hints ~12 hours) and shows fresh averages each time you glance
 at it.
+
+
+![Screenshot](ios_widget.png)
 
