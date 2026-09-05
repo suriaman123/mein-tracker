@@ -14,6 +14,7 @@ export default function Sleep() {
       step={0.25}
       historyPath="/sleep/history"
       quickAddSteps={[0.5, 1, 2]}
+      quickAddKey="sleep"
     />
   )
 }

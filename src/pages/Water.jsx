@@ -14,6 +14,7 @@ export default function Water() {
       step={0.1}
       historyPath="/water/history"
       quickAddSteps={[0.25, 0.5, 1]}
+      quickAddKey="water"
     />
   )
 }

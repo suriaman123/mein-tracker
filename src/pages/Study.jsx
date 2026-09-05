@@ -14,6 +14,7 @@ export default function Study() {
       step={0.25}
       historyPath="/study/history"
       quickAddSteps={[0.5, 1, 2]}
+      quickAddKey="study"
     />
   )
 }

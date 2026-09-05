@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../lib/AuthContext'
 import { useMonthlyStats } from '../lib/useMonthlyStats'
 import { useStreak } from '../lib/useStreak'
+import { useProfile } from '../lib/useProfile'
 import { saveLog, deleteLog } from '../lib/trackerCrud'
 import TrendChart from './TrendChart'
 import Layout from './Layout'
@@ -39,13 +40,18 @@ export default function TrackerPage({
   step = 0.25,
   valueLabel,
   historyPath,
-  quickAddSteps = [],
+  quickAddSteps: defaultQuickAddSteps = [],
+  quickAddKey,
 }) {
   const { user } = useAuth()
   const stats = useMonthlyStats(table, valueField)
   const streakInfo = useStreak(table)
+  const { profile } = useProfile()
   const location = useLocation()
   const navigate = useNavigate()
+
+  const quickAddSteps =
+    (quickAddKey && profile?.quick_add_steps?.[quickAddKey]) || defaultQuickAddSteps
 
   const [logDate, setLogDate] = useState(today())
   const [value, setValue] = useState('')

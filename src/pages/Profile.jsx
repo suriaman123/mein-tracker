@@ -2,9 +2,24 @@ import { useEffect, useState } from 'react'
 import { useAuth } from '../lib/AuthContext'
 import { useProfile } from '../lib/useProfile'
 import { saveProfile, uploadAvatar } from '../lib/profileCrud'
+import { downloadAllData } from '../lib/exportData'
 import Layout from '../components/Layout'
 import AccountSettings from './AccountSettings'
 import './Profile.css'
+
+const DEFAULT_QUICK_ADD = {
+  sleep: [0.5, 1, 2],
+  water: [0.25, 0.5, 1],
+  study: [0.5, 1, 2],
+}
+
+function parseSteps(text) {
+  return text
+    .split(',')
+    .map((s) => parseFloat(s.trim()))
+    .filter((n) => !Number.isNaN(n) && n > 0)
+    .slice(0, 4)
+}
 
 export default function Profile() {
   const { user } = useAuth()
@@ -18,12 +33,19 @@ export default function Profile() {
   const [goalWater, setGoalWater] = useState('')
   const [goalStudy, setGoalStudy] = useState('')
 
+  const [quickAddSleep, setQuickAddSleep] = useState('0.5, 1, 2')
+  const [quickAddWater, setQuickAddWater] = useState('0.25, 0.5, 1')
+  const [quickAddStudy, setQuickAddStudy] = useState('0.5, 1, 2')
+
   const [avatarPreview, setAvatarPreview] = useState(null)
   const [avatarFile, setAvatarFile] = useState(null)
 
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
+
+  const [exporting, setExporting] = useState(false)
+  const [exportError, setExportError] = useState('')
 
   useEffect(() => {
     if (!profile) return
@@ -34,6 +56,11 @@ export default function Profile() {
     setGoalSleep(profile.goal_sleep_hours ?? '')
     setGoalWater(profile.goal_water_liters ?? '')
     setGoalStudy(profile.goal_study_hours ?? '')
+
+    const qa = profile.quick_add_steps || DEFAULT_QUICK_ADD
+    setQuickAddSleep((qa.sleep || DEFAULT_QUICK_ADD.sleep).join(', '))
+    setQuickAddWater((qa.water || DEFAULT_QUICK_ADD.water).join(', '))
+    setQuickAddStudy((qa.study || DEFAULT_QUICK_ADD.study).join(', '))
   }, [profile])
 
   function handleAvatarChange(e) {
@@ -70,6 +97,11 @@ export default function Profile() {
       goal_sleep_hours: goalSleep === '' ? null : Number(goalSleep),
       goal_water_liters: goalWater === '' ? null : Number(goalWater),
       goal_study_hours: goalStudy === '' ? null : Number(goalStudy),
+      quick_add_steps: {
+        sleep: parseSteps(quickAddSleep).length ? parseSteps(quickAddSleep) : DEFAULT_QUICK_ADD.sleep,
+        water: parseSteps(quickAddWater).length ? parseSteps(quickAddWater) : DEFAULT_QUICK_ADD.water,
+        study: parseSteps(quickAddStudy).length ? parseSteps(quickAddStudy) : DEFAULT_QUICK_ADD.study,
+      },
     })
 
     setSaving(false)
@@ -223,6 +255,43 @@ export default function Profile() {
                 </div>
               </div>
             </div>
+            <div className="profile-card">
+              <h2>Quick add buttons</h2>
+              <p className="profile-card-sub">
+                Comma-separated amounts shown as tap-to-log buttons on each tracker page.
+              </p>
+
+              <div className="field">
+                <label htmlFor="quickAddSleep">Sleep (hrs)</label>
+                <input
+                  id="quickAddSleep"
+                  type="text"
+                  value={quickAddSleep}
+                  onChange={(e) => setQuickAddSleep(e.target.value)}
+                  placeholder="0.5, 1, 2"
+                />
+              </div>
+              <div className="field">
+                <label htmlFor="quickAddWater">Water (L)</label>
+                <input
+                  id="quickAddWater"
+                  type="text"
+                  value={quickAddWater}
+                  onChange={(e) => setQuickAddWater(e.target.value)}
+                  placeholder="0.25, 0.5, 1"
+                />
+              </div>
+              <div className="field">
+                <label htmlFor="quickAddStudy">Study (hrs)</label>
+                <input
+                  id="quickAddStudy"
+                  type="text"
+                  value={quickAddStudy}
+                  onChange={(e) => setQuickAddStudy(e.target.value)}
+                  placeholder="0.5, 1, 2"
+                />
+              </div>
+            </div>
           </div>
 
           <button className="auth-submit profile-submit" type="submit" disabled={saving}>
@@ -230,6 +299,34 @@ export default function Profile() {
           </button>
         </form>
       )}
+
+      <div className="overview-header profile-section-header">
+        <h1>Your data</h1>
+        <p>Download everything you've logged as a single JSON file.</p>
+      </div>
+
+      <div className="profile-card">
+        {exportError && <div className="auth-error">{exportError}</div>}
+        <p className="profile-card-sub">
+          Includes every entry across Sleep, Water, and Study (all-time, not just this
+          year), plus your profile details. Useful as a backup or if you ever want to
+          move your data elsewhere.
+        </p>
+        <button
+          type="button"
+          className="history-btn history-btn-primary"
+          disabled={exporting}
+          onClick={async () => {
+            setExportError('')
+            setExporting(true)
+            const { error } = await downloadAllData(user.id, profile)
+            setExporting(false)
+            if (error) setExportError(error.message)
+          }}
+        >
+          {exporting ? 'Preparing download…' : 'Download my data (JSON)'}
+        </button>
+      </div>
 
       <div className="overview-header profile-section-header">
         <h1>Account</h1>
