@@ -41,7 +41,7 @@ export default function Login() {
         <p className="auth-subtitle">Log in to see this month's overview.</p>
 
         <form className="auth-form" onSubmit={handleSubmit}>
-          {error && <div className="auth-error">{error}</div>}
+          {error && <div className="auth-error" role="alert">{error}</div>}
 
           <div className="field">
             <label htmlFor="email">Email</label>

@@ -29,8 +29,15 @@ export default function AvatarMenu() {
         setOpen(false)
       }
     }
+    function handleEscape(e) {
+      if (e.key === 'Escape') setOpen(false)
+    }
     document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+    document.addEventListener('keydown', handleEscape)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('keydown', handleEscape)
+    }
   }, [])
 
   function handleAvatarClick() {
@@ -52,28 +59,42 @@ export default function AvatarMenu() {
 
   return (
     <div className="avatar-menu" ref={ref}>
-      <button className="avatar-trigger" onClick={handleAvatarClick}>
+      <button
+        className="avatar-trigger"
+        onClick={handleAvatarClick}
+        aria-label="Account menu"
+        aria-haspopup="menu"
+        aria-expanded={open}
+      >
         {profile?.avatar_url ? (
-          <img src={profile.avatar_url} alt="" className="avatar-img" />
+          <img src={profile.avatar_url} alt="Your profile photo" className="avatar-img" />
         ) : (
-          <span className="avatar-initials">{initialsFor(user?.email)}</span>
+          <span className="avatar-initials" aria-hidden="true">
+            {initialsFor(user?.email)}
+          </span>
         )}
       </button>
 
       {open && (
-        <div className="avatar-dropdown">
+        <div className="avatar-dropdown" role="menu">
           <div className="avatar-dropdown-email">{user?.email}</div>
 
-          <Link to="/profile" className="avatar-dropdown-item" onClick={() => setOpen(false)}>
+          <Link
+            to="/profile"
+            className="avatar-dropdown-item"
+            role="menuitem"
+            onClick={() => setOpen(false)}
+          >
             Profile
           </Link>
 
-          <button className="avatar-dropdown-item" onClick={toggleTheme}>
+          <button className="avatar-dropdown-item" role="menuitem" onClick={toggleTheme}>
             {theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
           </button>
 
           <button
             className="avatar-dropdown-item avatar-dropdown-danger"
+            role="menuitem"
             onClick={signOut}
           >
             Log out

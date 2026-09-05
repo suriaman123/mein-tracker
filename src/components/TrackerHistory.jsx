@@ -161,7 +161,11 @@ export default function TrackerHistory({ title, table, valueField, unit, accentC
                     <td>{Number(entry[valueField]).toFixed(2)}</td>
                     <td className="history-notes-cell">{entry.notes || '—'}</td>
                     <td>
-                      <button className="log-action-btn" onClick={() => handleEdit(entry)}>
+                      <button
+                        className="log-action-btn"
+                        aria-label={`Edit entry for ${formatDate(entry.log_date)}`}
+                        onClick={() => handleEdit(entry)}
+                      >
                         Edit
                       </button>
                     </td>

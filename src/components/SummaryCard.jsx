@@ -28,7 +28,7 @@ export default function SummaryCard({
     <Link to={to} className={`summary-card ${accentClass}`}>
       <div className="summary-card-top">
         <span className="summary-card-title">{title}</span>
-        <span className="summary-card-arrow">→</span>
+        <span className="summary-card-arrow" aria-hidden="true">→</span>
       </div>
 
       {loading ? (
@@ -48,7 +48,9 @@ export default function SummaryCard({
           </div>
 
           {streak > 0 && (
-            <div className="summary-card-streak">🔥 {streak}-day streak</div>
+            <div className="summary-card-streak">
+              <span aria-hidden="true">🔥</span> {streak}-day streak
+            </div>
           )}
 
           {hasGoal && count > 0 && (

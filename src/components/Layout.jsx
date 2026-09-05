@@ -8,10 +8,14 @@ export default function Layout({ children }) {
 
   return (
     <div className="layout">
+      <a href="#main-content" className="skip-link">
+        Skip to content
+      </a>
+
       <header className="topbar">
         <div className="topbar-inner">
           <div className="brand">
-            <div className="phase-dots">
+            <div className="phase-dots" aria-hidden="true">
               <span />
               <span />
               <span />
@@ -19,7 +23,7 @@ export default function Layout({ children }) {
             <span className="brand-name">Mein Tracker</span>
           </div>
 
-          <nav className="topnav">
+          <nav className="topnav" aria-label="Main navigation">
             <NavLink to="/dashboard" end>
               Overview
             </NavLink>
@@ -35,7 +39,9 @@ export default function Layout({ children }) {
         </div>
       </header>
 
-      <main className="layout-content">{children}</main>
+      <main id="main-content" className="layout-content" tabIndex={-1}>
+        {children}
+      </main>
     </div>
   )
 }

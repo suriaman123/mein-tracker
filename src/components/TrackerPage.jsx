@@ -222,8 +222,8 @@ export default function TrackerPage({
           <form className="tracker-form" onSubmit={handleSubmit}>
           <h2>{existingEntryForDate ? 'Edit entry' : 'Log an entry'}</h2>
 
-          {error && <div className="auth-error">{error}</div>}
-          {savedMessage && <div className="auth-success">{savedMessage}</div>}
+          {error && <div className="auth-error" role="alert">{error}</div>}
+          {savedMessage && <div className="auth-success" role="status" aria-live="polite">{savedMessage}</div>}
           {existingEntryForDate && (
             <div className="tracker-form-notice">
               You already have an entry for this date — saving will update it.
@@ -307,6 +307,7 @@ export default function TrackerPage({
                       <button
                         type="button"
                         className="log-action-btn"
+                        aria-label={`Edit entry for ${formatDate(entry.log_date)}`}
                         onClick={() => loadEntryIntoForm(entry)}
                       >
                         Edit
@@ -314,6 +315,7 @@ export default function TrackerPage({
                       <button
                         type="button"
                         className="log-action-btn log-action-danger"
+                        aria-label={`Delete entry for ${formatDate(entry.log_date)}`}
                         disabled={deletingId === entry.id}
                         onClick={() => handleDelete(entry.id, formatDate(entry.log_date))}
                       >

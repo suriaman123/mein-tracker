@@ -53,14 +53,14 @@ export default function Register() {
         </p>
 
         {success ? (
-          <div className="auth-success">
+          <div className="auth-success" role="status" aria-live="polite">
             Account created. Check your email to confirm your address, then{' '}
             <Link to="/login">log in</Link>.
           </div>
         ) : (
           <>
             <form className="auth-form" onSubmit={handleSubmit}>
-              {error && <div className="auth-error">{error}</div>}
+              {error && <div className="auth-error" role="alert">{error}</div>}
 
               <div className="field">
                 <label htmlFor="email">Email</label>

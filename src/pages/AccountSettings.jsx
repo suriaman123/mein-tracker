@@ -78,8 +78,8 @@ export default function AccountSettings() {
         </p>
 
         <form onSubmit={handleEmailSubmit}>
-          {emailError && <div className="auth-error">{emailError}</div>}
-          {emailSuccess && <div className="auth-success">{emailSuccess}</div>}
+          {emailError && <div className="auth-error" role="alert">{emailError}</div>}
+          {emailSuccess && <div className="auth-success" role="status" aria-live="polite">{emailSuccess}</div>}
 
           <div className="field">
             <label htmlFor="newEmail">New email</label>
@@ -105,8 +105,8 @@ export default function AccountSettings() {
         </p>
 
         <form onSubmit={handlePasswordSubmit}>
-          {passwordError && <div className="auth-error">{passwordError}</div>}
-          {passwordSuccess && <div className="auth-success">{passwordSuccess}</div>}
+          {passwordError && <div className="auth-error" role="alert">{passwordError}</div>}
+          {passwordSuccess && <div className="auth-success" role="status" aria-live="polite">{passwordSuccess}</div>}
 
           <div className="field">
             <label htmlFor="newPassword">New password</label>

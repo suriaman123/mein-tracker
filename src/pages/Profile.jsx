@@ -130,8 +130,8 @@ export default function Profile() {
         <p className="tracker-empty">Loading…</p>
       ) : (
         <form className="profile-form" onSubmit={handleSubmit}>
-          {error && <div className="auth-error">{error}</div>}
-          {success && <div className="auth-success">Profile saved.</div>}
+          {error && <div className="auth-error" role="alert">{error}</div>}
+          {success && <div className="auth-success" role="status" aria-live="polite">Profile saved.</div>}
 
           <div className="profile-grid">
             <div className="profile-card">
@@ -139,7 +139,7 @@ export default function Profile() {
               <div className="avatar-upload">
                 <div className="avatar-upload-preview">
                   {displayedAvatar ? (
-                    <img src={displayedAvatar} alt="" />
+                    <img src={displayedAvatar} alt="Your profile photo" />
                   ) : (
                     <span>{(user?.email || '?').slice(0, 2).toUpperCase()}</span>
                   )}
@@ -306,7 +306,7 @@ export default function Profile() {
       </div>
 
       <div className="profile-card">
-        {exportError && <div className="auth-error">{exportError}</div>}
+        {exportError && <div className="auth-error" role="alert">{exportError}</div>}
         <p className="profile-card-sub">
           Includes every entry across Sleep, Water, and Study (all-time, not just this
           year), plus your profile details. Useful as a backup or if you ever want to
