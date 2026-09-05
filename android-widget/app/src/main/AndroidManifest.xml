@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Mein Tracker Widget"
+        android:theme="@style/Theme.MeinTrackerWidget">
+
+        <!-- Configuration screen: shown once when the widget is added,
+             asks for email/password, stores them, then finishes and
+             triggers the widget's first update. -->
+        <activity
+            android:name=".ConfigActivity"
+            android:exported="false"
+            android:label="Mein Tracker Widget Setup">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <!-- Also launchable directly from the app drawer, in case you want
+             to re-enter credentials or check things manually. -->
+        <activity
+            android:name=".LauncherActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name=".TrackerWidgetProvider"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/tracker_widget_info" />
+        </receiver>
+
+    </application>
+</manifest>
