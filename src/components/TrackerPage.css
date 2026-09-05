@@ -19,6 +19,54 @@
   padding: 1.5rem;
 }
 
+.tracker-form-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.quick-add-row {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.1rem 1.5rem;
+}
+
+.quick-add-label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.6rem;
+}
+
+.quick-add-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.quick-add-btn {
+  background: var(--accent-soft);
+  border: 1px solid var(--card-accent, var(--accent));
+  color: var(--text);
+  border-radius: 999px;
+  padding: 0.4rem 0.95rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.quick-add-btn:hover:not(:disabled) {
+  background: var(--card-accent, var(--accent));
+  color: var(--ink);
+}
+
+.quick-add-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .tracker-form {
   position: relative;
   overflow: hidden;

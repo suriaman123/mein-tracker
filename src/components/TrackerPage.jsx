@@ -39,6 +39,7 @@ export default function TrackerPage({
   step = 0.25,
   valueLabel,
   historyPath,
+  quickAddSteps = [],
 }) {
   const { user } = useAuth()
   const stats = useMonthlyStats(table, valueField)
@@ -53,6 +54,7 @@ export default function TrackerPage({
   const [error, setError] = useState('')
   const [deletingId, setDeletingId] = useState(null)
   const [savedMessage, setSavedMessage] = useState('')
+  const [quickAdding, setQuickAdding] = useState(null)
 
   // If we arrived here via the "Edit" button on the yearly history table,
   // prefill the form with that entry — works for any month, not just this one.
@@ -123,6 +125,36 @@ export default function TrackerPage({
     setTimeout(() => setSavedMessage(''), 5000)
   }
 
+  async function handleQuickAdd(step) {
+    setError('')
+    setQuickAdding(step)
+
+    const todayStr = today()
+    const existing = stats.logs.find((l) => l.log_date === todayStr)
+    const currentValue = existing ? Number(existing[valueField]) : 0
+    const newValue = Math.min(max, currentValue + step)
+
+    const { error } = await saveLog(table, {
+      userId: user.id,
+      logDate: todayStr,
+      valueField,
+      value: newValue,
+      notes: existing?.notes || '',
+    })
+
+    setQuickAdding(null)
+
+    if (error) {
+      setError(error.message)
+      return
+    }
+
+    stats.refresh()
+    streakInfo.refresh()
+    setSavedMessage(`Added ${step} ${unit} to today (total: ${newValue.toFixed(2)} ${unit}).`)
+    setTimeout(() => setSavedMessage(''), 5000)
+  }
+
   async function handleDelete(id, dateLabel) {
     const confirmed = window.confirm(`Delete the entry for ${dateLabel}? This can't be undone.`)
     if (!confirmed) return
@@ -161,7 +193,27 @@ export default function TrackerPage({
       </div>
 
       <div className={`tracker-layout ${accentClass}`}>
-        <form className="tracker-form" onSubmit={handleSubmit}>
+        <div className="tracker-form-col">
+          {quickAddSteps.length > 0 && (
+            <div className="quick-add-row">
+              <span className="quick-add-label">Quick add for today:</span>
+              <div className="quick-add-buttons">
+                {quickAddSteps.map((step) => (
+                  <button
+                    key={step}
+                    type="button"
+                    className="quick-add-btn"
+                    disabled={quickAdding !== null}
+                    onClick={() => handleQuickAdd(step)}
+                  >
+                    {quickAdding === step ? '…' : `+${step} ${unit}`}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <form className="tracker-form" onSubmit={handleSubmit}>
           <h2>{existingEntryForDate ? 'Edit entry' : 'Log an entry'}</h2>
 
           {error && <div className="auth-error">{error}</div>}
@@ -214,6 +266,7 @@ export default function TrackerPage({
             {saving ? 'Saving…' : existingEntryForDate ? 'Update entry' : 'Save entry'}
           </button>
         </form>
+        </div>
 
         <div className="tracker-right-col">
           <div className="tracker-chart-card">

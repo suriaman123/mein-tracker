@@ -3,7 +3,7 @@ import { useAuth } from '../lib/AuthContext'
 import { useProfile } from '../lib/useProfile'
 import { saveProfile, uploadAvatar } from '../lib/profileCrud'
 import Layout from '../components/Layout'
-import './Profile.css'
+import AccountSettings from './AccountSettings'
 import './Profile.css'
 
 export default function Profile() {
@@ -230,6 +230,13 @@ export default function Profile() {
           </button>
         </form>
       )}
+
+      <div className="overview-header profile-section-header">
+        <h1>Account</h1>
+        <p>Update your login email or password.</p>
+      </div>
+
+      <AccountSettings />
     </Layout>
   )
 }

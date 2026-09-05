@@ -13,6 +13,7 @@ export default function Sleep() {
       max={24}
       step={0.25}
       historyPath="/sleep/history"
+      quickAddSteps={[0.5, 1, 2]}
     />
   )
 }

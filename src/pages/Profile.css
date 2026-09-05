@@ -107,6 +107,10 @@
   max-width: 220px;
 }
 
+.profile-section-header {
+  margin-top: 2.5rem;
+}
+
 @media (max-width: 480px) {
   .profile-field-row {
     grid-template-columns: 1fr;

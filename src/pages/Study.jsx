@@ -13,6 +13,7 @@ export default function Study() {
       max={24}
       step={0.25}
       historyPath="/study/history"
+      quickAddSteps={[0.5, 1, 2]}
     />
   )
 }
