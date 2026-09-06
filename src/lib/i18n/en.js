@@ -63,6 +63,7 @@ export default {
     hoursSlept: 'Hours slept',
     litersDrunk: 'Liters drunk',
     hoursStudied: 'Hours studied',
+    timesToday: 'Times today',
     noEntriesMonth: 'No entries yet this month.',
     monthAverageOne: "This month's average: {avg} {unit} over {count} entry.",
     monthAverageMany: "This month's average: {avg} {unit} over {count} entries.",
@@ -168,6 +169,8 @@ export default {
     hrs: 'hrs',
     liters: 'L',
     times: 'times',
+    cancel: 'Cancel',
+    confirm: 'Delete',
   },
 
   chart: {

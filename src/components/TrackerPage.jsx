@@ -5,6 +5,7 @@ import { useMonthlyStats } from '../lib/useMonthlyStats'
 import { useStreak } from '../lib/useStreak'
 import { useProfile } from '../lib/useProfile'
 import { useLanguage } from '../lib/LanguageContext'
+import { useConfirm } from '../lib/ConfirmContext'
 import { saveLog, deleteLog } from '../lib/trackerCrud'
 import TrendChart from './TrendChart'
 import Layout from './Layout'
@@ -41,6 +42,7 @@ export default function TrackerPage({
   const streakInfo = useStreak(table)
   const { profile } = useProfile()
   const { t, locale } = useLanguage()
+  const confirm = useConfirm()
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -164,7 +166,7 @@ export default function TrackerPage({
   }
 
   async function handleDelete(id, dateLabel) {
-    const confirmed = window.confirm(t('tracker.deleteConfirm', { date: dateLabel }))
+    const confirmed = await confirm(t('tracker.deleteConfirm', { date: dateLabel }))
     if (!confirmed) return
 
     setDeletingId(id)

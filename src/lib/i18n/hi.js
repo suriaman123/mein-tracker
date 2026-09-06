@@ -63,6 +63,7 @@ export default {
     hoursSlept: 'सोए गए घंटे',
     litersDrunk: 'पिया गया पानी (लीटर)',
     hoursStudied: 'पढ़ाई के घंटे',
+    timesToday: 'आज कितनी बार',
     noEntriesMonth: 'इस महीने अभी तक कोई प्रविष्टि नहीं।',
     monthAverageOne: 'इस महीने का औसत: {count} प्रविष्टि में {avg} {unit}।',
     monthAverageMany: 'इस महीने का औसत: {count} प्रविष्टियों में {avg} {unit}।',
@@ -169,6 +170,8 @@ export default {
     hrs: 'घंटे',
     liters: 'लीटर',
     times: 'बार',
+    cancel: 'रद्द करें',
+    confirm: 'हटाएं',
   },
 
   chart: {

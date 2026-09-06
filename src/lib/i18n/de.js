@@ -64,6 +64,7 @@ export default {
     hoursSlept: 'Stunden geschlafen',
     litersDrunk: 'Liter getrunken',
     hoursStudied: 'Stunden gelernt',
+    timesToday: 'Male heute',
     noEntriesMonth: 'Diesen Monat noch keine Einträge.',
     monthAverageOne: 'Durchschnitt diesen Monat: {avg} {unit} über {count} Eintrag.',
     monthAverageMany: 'Durchschnitt diesen Monat: {avg} {unit} über {count} Einträge.',
@@ -170,6 +171,8 @@ export default {
     hrs: 'Std.',
     liters: 'L',
     times: 'Mal',
+    cancel: 'Abbrechen',
+    confirm: 'Löschen',
   },
 
   chart: {

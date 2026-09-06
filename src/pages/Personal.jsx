@@ -9,7 +9,7 @@ export default function Personal() {
       table="personal_logs"
       valueField="count"
       unit={t('common.times')}
-      valueLabel="Times today"
+      valueLabel={t('tracker.timesToday')}
       accentClass="accent-hidden"
       min={0}
       max={50}
