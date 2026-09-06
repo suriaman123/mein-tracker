@@ -77,3 +77,43 @@
 .avatar-dropdown-danger {
   color: var(--error);
 }
+
+.avatar-dropdown-lang {
+  padding: 0.5rem 0.7rem;
+}
+
+.avatar-dropdown-lang-label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.avatar-dropdown-lang-options {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.lang-option-btn {
+  flex: 1;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 6px;
+  padding: 0.35rem 0.4rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  font-family: var(--font-body);
+}
+
+.lang-option-btn:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.lang-option-active {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--text);
+  font-weight: 600;
+}

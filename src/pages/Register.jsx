@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../lib/AuthContext'
+import { useLanguage } from '../lib/LanguageContext'
 import './Auth.css'
 
 export default function Register() {
   const { signUp } = useAuth()
+  const { t } = useLanguage()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -18,12 +20,12 @@ export default function Register() {
     setError('')
 
     if (password !== confirmPassword) {
-      setError("Passwords don't match.")
+      setError(t('auth.passwordsDontMatch'))
       return
     }
 
     if (password.length < 6) {
-      setError('Password must be at least 6 characters.')
+      setError(t('auth.passwordTooShort'))
       return
     }
 
@@ -42,20 +44,19 @@ export default function Register() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <div className="phase-dots">
+        <div className="phase-dots" aria-hidden="true">
           <span />
           <span />
           <span />
         </div>
-        <h1>Create your account</h1>
-        <p className="auth-subtitle">
-          Start tracking sleep, water, and study time.
-        </p>
+        <h1>{t('auth.registerTitle')}</h1>
+        <p className="auth-subtitle">{t('auth.registerSubtitle')}</p>
 
         {success ? (
           <div className="auth-success" role="status" aria-live="polite">
-            Account created. Check your email to confirm your address, then{' '}
-            <Link to="/login">log in</Link>.
+            {t('auth.registerSuccessPrefix')}
+            <Link to="/login">{t('auth.registerSuccessLink')}</Link>
+            {t('auth.registerSuccessSuffix')}
           </div>
         ) : (
           <>
@@ -63,7 +64,7 @@ export default function Register() {
               {error && <div className="auth-error" role="alert">{error}</div>}
 
               <div className="field">
-                <label htmlFor="email">Email</label>
+                <label htmlFor="email">{t('auth.email')}</label>
                 <input
                   id="email"
                   type="email"
@@ -75,7 +76,7 @@ export default function Register() {
               </div>
 
               <div className="field">
-                <label htmlFor="password">Password</label>
+                <label htmlFor="password">{t('auth.password')}</label>
                 <input
                   id="password"
                   type="password"
@@ -87,7 +88,7 @@ export default function Register() {
               </div>
 
               <div className="field">
-                <label htmlFor="confirmPassword">Confirm password</label>
+                <label htmlFor="confirmPassword">{t('auth.confirmPassword')}</label>
                 <input
                   id="confirmPassword"
                   type="password"
@@ -99,12 +100,12 @@ export default function Register() {
               </div>
 
               <button className="auth-submit" type="submit" disabled={submitting}>
-                {submitting ? 'Creating account…' : 'Register'}
+                {submitting ? t('auth.creatingAccount') : t('auth.registerButton')}
               </button>
             </form>
 
             <p className="auth-switch">
-              Already have an account? <Link to="/login">Log in</Link>
+              {t('auth.haveAccount')} <Link to="/login">{t('auth.loginLink')}</Link>
             </p>
           </>
         )}

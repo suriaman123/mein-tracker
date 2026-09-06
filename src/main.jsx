@@ -4,6 +4,7 @@ import { HashRouter } from 'react-router-dom'
 import { AuthProvider } from './lib/AuthContext'
 import { ThemeProvider } from './lib/ThemeContext'
 import { HiddenModeProvider } from './lib/HiddenModeContext'
+import { LanguageProvider } from './lib/LanguageContext'
 import './index.css'
 import App from './App.jsx'
 
@@ -14,15 +15,17 @@ import App from './App.jsx'
 // resolves correctly with zero extra config.
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ThemeProvider>
-      <HiddenModeProvider>
-        <HashRouter>
-          <AuthProvider>
-            <App />
-          </AuthProvider>
-        </HashRouter>
-      </HiddenModeProvider>
-    </ThemeProvider>
+    <LanguageProvider>
+      <ThemeProvider>
+        <HiddenModeProvider>
+          <HashRouter>
+            <AuthProvider>
+              <App />
+            </AuthProvider>
+          </HashRouter>
+        </HiddenModeProvider>
+      </ThemeProvider>
+    </LanguageProvider>
   </StrictMode>,
 )
 

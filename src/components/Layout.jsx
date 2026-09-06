@@ -1,15 +1,17 @@
 import { NavLink } from 'react-router-dom'
 import AvatarMenu from './AvatarMenu'
 import { useHiddenMode } from '../lib/HiddenModeContext'
+import { useLanguage } from '../lib/LanguageContext'
 import './Layout.css'
 
 export default function Layout({ children }) {
   const { hidden } = useHiddenMode()
+  const { t } = useLanguage()
 
   return (
     <div className="layout">
       <a href="#main-content" className="skip-link">
-        Skip to content
+        {t('nav.skipToContent')}
       </a>
 
       <header className="topbar">
@@ -23,13 +25,13 @@ export default function Layout({ children }) {
             <span className="brand-name">Mein Tracker</span>
           </div>
 
-          <nav className="topnav" aria-label="Main navigation">
+          <nav className="topnav" aria-label={t('nav.mainNavigation')}>
             <NavLink to="/dashboard" end>
-              Overview
+              {t('nav.overview')}
             </NavLink>
-            <NavLink to="/sleep">Sleep</NavLink>
-            <NavLink to="/water">Water</NavLink>
-            <NavLink to="/study">Study</NavLink>
+            <NavLink to="/sleep">{t('nav.sleep')}</NavLink>
+            <NavLink to="/water">{t('nav.water')}</NavLink>
+            <NavLink to="/study">{t('nav.study')}</NavLink>
             {hidden && <NavLink to="/personal">हस्तमैथुन</NavLink>}
           </nav>
 

@@ -2,15 +2,15 @@ import { useAuth } from '../lib/AuthContext'
 import { useMonthlyStats } from '../lib/useMonthlyStats'
 import { useProfile } from '../lib/useProfile'
 import { useStreak } from '../lib/useStreak'
+import { useLanguage } from '../lib/LanguageContext'
 import Layout from '../components/Layout'
 import SummaryCard from '../components/SummaryCard'
 import './Dashboard.css'
 
-const MONTH_NAME = new Date().toLocaleString('default', { month: 'long' })
-
 export default function Dashboard() {
   const { user } = useAuth()
   const { profile } = useProfile()
+  const { t, locale } = useLanguage()
   const sleep = useMonthlyStats('sleep_logs', 'hours')
   const water = useMonthlyStats('water_logs', 'liters')
   const study = useMonthlyStats('study_logs', 'hours')
@@ -20,17 +20,18 @@ export default function Dashboard() {
   const studyStreak = useStreak('study_logs')
 
   const firstName = user?.email?.split('@')[0]
+  const monthName = new Date().toLocaleString(locale, { month: 'long' })
 
   return (
     <Layout>
       <div className="overview-header">
-        <h1>{MONTH_NAME} overview</h1>
-        <p>Welcome back, {firstName}. Here's how this month is looking.</p>
+        <h1>{monthName} {t('dashboard.overviewSuffix')}</h1>
+        <p>{t('dashboard.welcomeBack', { name: firstName })}</p>
       </div>
 
       <div className="summary-grid">
         <SummaryCard
-          title="Sleep"
+          title={t('dashboard.sleepTitle')}
           unit="hrs / night"
           average={sleep.average}
           count={sleep.count}
@@ -42,7 +43,7 @@ export default function Dashboard() {
           streak={sleepStreak.streak}
         />
         <SummaryCard
-          title="Water intake"
+          title={t('dashboard.waterTitle')}
           unit="L / day"
           average={water.average}
           count={water.count}
@@ -54,7 +55,7 @@ export default function Dashboard() {
           streak={waterStreak.streak}
         />
         <SummaryCard
-          title="Study time"
+          title={t('dashboard.studyTitle')}
           unit="hrs / day"
           average={study.average}
           count={study.count}

@@ -1,13 +1,15 @@
 import TrackerPage from '../components/TrackerPage'
+import { useLanguage } from '../lib/LanguageContext'
 
 export default function Sleep() {
+  const { t } = useLanguage()
   return (
     <TrackerPage
-      title="Sleep tracker"
+      title={t('tracker.sleepTitle')}
       table="sleep_logs"
       valueField="hours"
-      unit="hrs"
-      valueLabel="Hours slept"
+      unit={t('common.hrs')}
+      valueLabel={t('tracker.hoursSlept')}
       accentClass="accent-sleep"
       min={0}
       max={24}

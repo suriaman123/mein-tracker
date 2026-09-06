@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
+import { useLanguage } from '../lib/LanguageContext'
 
 export default function SummaryCard({
   title,
@@ -13,6 +14,7 @@ export default function SummaryCard({
   streak = 0,
 }) {
   const navigate = useNavigate()
+  const { t } = useLanguage()
   const numericGoal = goal !== null && goal !== undefined && goal !== '' ? Number(goal) : null
   const hasGoal = numericGoal !== null && !Number.isNaN(numericGoal) && numericGoal > 0
   const progressPercent = hasGoal && count > 0 ? Math.min(100, (average / numericGoal) * 100) : 0
@@ -32,9 +34,9 @@ export default function SummaryCard({
       </div>
 
       {loading ? (
-        <div className="summary-card-loading">Loading…</div>
+        <div className="summary-card-loading">{t('tracker.loading')}</div>
       ) : error ? (
-        <div className="summary-card-error">Couldn't load data</div>
+        <div className="summary-card-error">{t('dashboard.couldntLoad')}</div>
       ) : (
         <>
           <div className="summary-card-average">
@@ -43,13 +45,13 @@ export default function SummaryCard({
           </div>
           <div className="summary-card-meta">
             {count === 0
-              ? 'No entries yet this month'
-              : `avg over ${count} ${count === 1 ? 'entry' : 'entries'} this month`}
+              ? t('dashboard.noEntries')
+              : t(count === 1 ? 'dashboard.avgOverEntry' : 'dashboard.avgOverEntries', { count })}
           </div>
 
           {streak > 0 && (
             <div className="summary-card-streak">
-              <span aria-hidden="true">🔥</span> {streak}-day streak
+              <span aria-hidden="true">🔥</span> {t('dashboard.dayStreak', { count: streak })}
             </div>
           )}
 
@@ -63,15 +65,19 @@ export default function SummaryCard({
               </div>
               <div className="goal-bar-label">
                 {metGoal
-                  ? `Goal reached (${numericGoal} ${unit})`
-                  : `${Math.round(progressPercent)}% of ${numericGoal} ${unit} goal`}
+                  ? t('dashboard.goalReached', { goal: numericGoal, unit })
+                  : t('dashboard.percentOfGoal', {
+                      percent: Math.round(progressPercent),
+                      goal: numericGoal,
+                      unit,
+                    })}
               </div>
             </div>
           )}
 
           {!hasGoal && (
             <span className="summary-card-set-goal" onClick={goToProfile}>
-              Set a goal
+              {t('dashboard.setGoal')}
             </span>
           )}
         </>

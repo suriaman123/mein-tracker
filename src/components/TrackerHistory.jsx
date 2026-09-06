@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useYearlyStats } from '../lib/useYearlyStats'
+import { useLanguage } from '../lib/LanguageContext'
 import MonthlyTrendChart from './MonthlyTrendChart'
 import Layout from './Layout'
 import './TrackerHistory.css'
@@ -12,38 +13,42 @@ const ACCENT_COLORS = {
   'accent-hidden': '#FF7A00',
 }
 
-const MONTH_NAMES = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December',
-]
-
-function formatDate(dateStr) {
-  return new Date(dateStr + 'T00:00:00').toLocaleDateString('default', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  })
-}
-
-function downloadCsv(logs, valueField, unit, filename) {
-  const header = ['Date', `Value (${unit})`, 'Notes']
-  const rows = logs.map((l) => [l.log_date, l[valueField], (l.notes || '').replace(/,/g, ';')])
-  const csv = [header, ...rows].map((row) => row.join(',')).join('\n')
-
-  const blob = new Blob([csv], { type: 'text/csv' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = filename
-  a.click()
-  URL.revokeObjectURL(url)
+function getMonthNames(locale, format = 'long') {
+  return Array.from({ length: 12 }, (_, i) =>
+    new Date(2000, i, 1).toLocaleDateString(locale, { month: format })
+  )
 }
 
 // table: 'sleep_logs' | 'water_logs' | 'study_logs'
 export default function TrackerHistory({ title, table, valueField, unit, accentClass, backPath }) {
   const stats = useYearlyStats(table)
   const navigate = useNavigate()
+  const { t, locale } = useLanguage()
   const year = new Date().getFullYear()
+  const monthNames = getMonthNames(locale, 'long')
+  const monthNamesShort = getMonthNames(locale, 'short')
+
+  function formatDate(dateStr) {
+    return new Date(dateStr + 'T00:00:00').toLocaleDateString(locale, {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    })
+  }
+
+  function downloadCsv(logs, filename) {
+    const header = ['Date', `Value (${unit})`, 'Notes']
+    const rows = logs.map((l) => [l.log_date, l[valueField], (l.notes || '').replace(/,/g, ';')])
+    const csv = [header, ...rows].map((row) => row.join(',')).join('\n')
+
+    const blob = new Blob([csv], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = filename
+    a.click()
+    URL.revokeObjectURL(url)
+  }
 
   const [monthFilter, setMonthFilter] = useState('all')
   const [sortBy, setSortBy] = useState('date_desc')
@@ -86,71 +91,75 @@ export default function TrackerHistory({ title, table, valueField, unit, accentC
           <h1>{title} — {year}</h1>
           <p>
             {stats.count === 0
-              ? 'No entries yet this year.'
-              : `${stats.count} entries logged in ${year}.`}
+              ? t('trackerHistory.noEntriesYear')
+              : t('trackerHistory.entriesThisYear', { count: stats.count, year })}
           </p>
         </div>
         <div className="history-header-actions">
           <button
             className="history-btn"
             disabled={stats.count === 0}
-            onClick={() => downloadCsv(stats.logs, valueField, unit, `${table}_${year}.csv`)}
+            onClick={() => downloadCsv(stats.logs, `${table}_${year}.csv`)}
           >
-            Download CSV
+            {t('trackerHistory.downloadCsv')}
           </button>
           <Link to={backPath} className="history-btn history-btn-primary">
-            Back to {title}
+            {t('trackerHistory.backTo', { title })}
           </Link>
         </div>
       </div>
 
       <div className={`tracker-chart-card ${accentClass}`}>
-        <h2>Monthly averages</h2>
+        <h2>{t('trackerHistory.monthlyAverages')}</h2>
         {stats.loading ? (
-          <p className="tracker-empty">Loading…</p>
+          <p className="tracker-empty">{t('trackerHistory.loading')}</p>
         ) : (
           <MonthlyTrendChart
             logs={stats.logs}
             valueField={valueField}
             unit={unit}
             accentColor={ACCENT_COLORS[accentClass]}
+            monthNames={monthNamesShort}
+            avgLabel={t('chart.avg')}
+            entryWord={t('chart.entry')}
+            entriesWord={t('chart.entries')}
           />
         )}
       </div>
 
       <div className="history-table-card">
         <div className="history-table-header">
-          <h2>All entries this year</h2>
+          <h2>{t('trackerHistory.allEntriesThisYear')}</h2>
           <div className="history-controls">
             <select value={monthFilter} onChange={(e) => setMonthFilter(e.target.value)}>
-              <option value="all">All months</option>
-              {MONTH_NAMES.map((name, i) => (
+              <option value="all">{t('trackerHistory.allMonths')}</option>
+              {monthNames.map((name, i) => (
                 <option key={name} value={i}>{name}</option>
               ))}
             </select>
             <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-              <option value="date_desc">Date (newest first)</option>
-              <option value="date_asc">Date (oldest first)</option>
-              <option value="value_desc">{unit} (highest first)</option>
-              <option value="value_asc">{unit} (lowest first)</option>
+              <option value="date_desc">{t('trackerHistory.dateNewest')}</option>
+              <option value="date_asc">{t('trackerHistory.dateOldest')}</option>
+              <option value="value_desc">{t('trackerHistory.valueHighest', { unit })}</option>
+              <option value="value_asc">{t('trackerHistory.valueLowest', { unit })}</option>
             </select>
           </div>
         </div>
 
         {stats.loading ? (
-          <p className="tracker-empty">Loading…</p>
+          <p className="tracker-empty">{t('trackerHistory.loading')}</p>
         ) : stats.logs.length === 0 ? (
-          <p className="tracker-empty">Nothing logged yet this year.</p>
+          <p className="tracker-empty">{t('trackerHistory.noEntriesYear')}</p>
         ) : visibleLogs.length === 0 ? (
-          <p className="tracker-empty">No entries match that filter.</p>
+          <p className="tracker-empty">{t('trackerHistory.noEntriesMatch')}</p>
         ) : (
           <div className="history-table-wrap">
             <table className="history-table">
               <thead>
                 <tr>
-                  <th>Date</th>
+                  <th>{t('trackerHistory.colDate')}</th>
                   <th>{unit}</th>
-                  <th>Notes</th>
+                  <th>{t('trackerHistory.colNotes')}</th>
                   <th></th>
                 </tr>
               </thead>
@@ -163,10 +172,10 @@ export default function TrackerHistory({ title, table, valueField, unit, accentC
                     <td>
                       <button
                         className="log-action-btn"
-                        aria-label={`Edit entry for ${formatDate(entry.log_date)}`}
+                        aria-label={t('tracker.editAriaLabel', { date: formatDate(entry.log_date) })}
                         onClick={() => handleEdit(entry)}
                       >
-                        Edit
+                        {t('tracker.editButton')}
                       </button>
                     </td>
                   </tr>

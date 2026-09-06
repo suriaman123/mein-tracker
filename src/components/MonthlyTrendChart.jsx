@@ -16,12 +16,7 @@ function cssVar(name, fallback) {
   return value || fallback
 }
 
-const MONTH_LABELS = [
-  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
-]
-
-function CustomTooltip({ active, payload, unit }) {
+function CustomTooltip({ active, payload, unit, avgLabel, entryWord, entriesWord }) {
   if (!active || !payload?.length) return null
   const point = payload[0].payload
   if (point.count === 0) return null
@@ -29,7 +24,7 @@ function CustomTooltip({ active, payload, unit }) {
     <div className="chart-tooltip">
       <div className="chart-tooltip-date">{point.month}</div>
       <div className="chart-tooltip-value">
-        {point.average.toFixed(2)} {unit} avg · {point.count} {point.count === 1 ? 'entry' : 'entries'}
+        {point.average.toFixed(2)} {unit} {avgLabel} · {point.count} {point.count === 1 ? entryWord : entriesWord}
       </div>
     </div>
   )
@@ -37,9 +32,21 @@ function CustomTooltip({ active, payload, unit }) {
 
 // logs: all of this year's entries (any month). Groups them by month
 // and computes each month's average.
-export default function MonthlyTrendChart({ logs, valueField, unit, accentColor = '#8FA3F3' }) {
+export default function MonthlyTrendChart({
+  logs,
+  valueField,
+  unit,
+  accentColor = '#8FA3F3',
+  monthNames,
+  avgLabel = 'avg',
+  entryWord = 'entry',
+  entriesWord = 'entries',
+}) {
+  const labels =
+    monthNames || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
   const byMonth = Array.from({ length: 12 }, (_, i) => ({
-    month: MONTH_LABELS[i],
+    month: labels[i],
     values: [],
   }))
 
@@ -74,7 +81,7 @@ export default function MonthlyTrendChart({ logs, valueField, unit, accentColor 
           width={32}
         />
         <Tooltip
-          content={<CustomTooltip unit={unit} />}
+          content={<CustomTooltip unit={unit} avgLabel={avgLabel} entryWord={entryWord} entriesWord={entriesWord} />}
           cursor={{ fill: 'rgba(255,255,255,0.04)' }}
         />
         <Bar dataKey="average" fill={accentColor} radius={[4, 4, 0, 0]} maxBarSize={36} />

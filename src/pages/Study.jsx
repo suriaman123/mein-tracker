@@ -1,13 +1,15 @@
 import TrackerPage from '../components/TrackerPage'
+import { useLanguage } from '../lib/LanguageContext'
 
 export default function Study() {
+  const { t } = useLanguage()
   return (
     <TrackerPage
-      title="Study hours tracker"
+      title={t('tracker.studyTitle')}
       table="study_logs"
       valueField="hours"
-      unit="hrs"
-      valueLabel="Hours studied"
+      unit={t('common.hrs')}
+      valueLabel={t('tracker.hoursStudied')}
       accentClass="accent-study"
       min={0}
       max={24}

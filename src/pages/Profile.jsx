@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../lib/AuthContext'
 import { useProfile } from '../lib/useProfile'
+import { useLanguage } from '../lib/LanguageContext'
 import { saveProfile, uploadAvatar } from '../lib/profileCrud'
 import { downloadAllData } from '../lib/exportData'
 import Layout from '../components/Layout'
@@ -24,6 +25,7 @@ function parseSteps(text) {
 export default function Profile() {
   const { user } = useAuth()
   const { profile, loading, refresh } = useProfile()
+  const { t } = useLanguage()
 
   const [fullName, setFullName] = useState('')
   const [age, setAge] = useState('')
@@ -122,20 +124,20 @@ export default function Profile() {
   return (
     <Layout>
       <div className="overview-header">
-        <h1>Your profile</h1>
-        <p>Personal details and daily goals — visible only to you.</p>
+        <h1>{t('profile.yourProfile')}</h1>
+        <p>{t('profile.subtitle')}</p>
       </div>
 
       {loading ? (
-        <p className="tracker-empty">Loading…</p>
+        <p className="tracker-empty">{t('profile.loading')}</p>
       ) : (
         <form className="profile-form" onSubmit={handleSubmit}>
           {error && <div className="auth-error" role="alert">{error}</div>}
-          {success && <div className="auth-success" role="status" aria-live="polite">Profile saved.</div>}
+          {success && <div className="auth-success" role="status" aria-live="polite">{t('profile.profileSaved')}</div>}
 
           <div className="profile-grid">
             <div className="profile-card">
-              <h2>Photo</h2>
+              <h2>{t('profile.photoHeading')}</h2>
               <div className="avatar-upload">
                 <div className="avatar-upload-preview">
                   {displayedAvatar ? (
@@ -145,7 +147,7 @@ export default function Profile() {
                   )}
                 </div>
                 <label className="history-btn avatar-upload-btn">
-                  Choose photo
+                  {t('profile.choosePhoto')}
                   <input
                     type="file"
                     accept="image/*"
@@ -157,22 +159,22 @@ export default function Profile() {
             </div>
 
             <div className="profile-card">
-              <h2>Personal details</h2>
+              <h2>{t('profile.personalDetails')}</h2>
 
               <div className="field">
-                <label htmlFor="fullName">Name</label>
+                <label htmlFor="fullName">{t('profile.name')}</label>
                 <input
                   id="fullName"
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  placeholder="Your name"
+                  placeholder={t('profile.namePlaceholder')}
                 />
               </div>
 
               <div className="profile-field-row">
                 <div className="field">
-                  <label htmlFor="age">Age</label>
+                  <label htmlFor="age">{t('profile.age')}</label>
                   <input
                     id="age"
                     type="number"
@@ -183,7 +185,7 @@ export default function Profile() {
                   />
                 </div>
                 <div className="field">
-                  <label htmlFor="heightCm">Height (cm)</label>
+                  <label htmlFor="heightCm">{t('profile.heightCm')}</label>
                   <input
                     id="heightCm"
                     type="number"
@@ -194,7 +196,7 @@ export default function Profile() {
                   />
                 </div>
                 <div className="field">
-                  <label htmlFor="weightKg">Weight (kg)</label>
+                  <label htmlFor="weightKg">{t('profile.weightKg')}</label>
                   <input
                     id="weightKg"
                     type="number"
@@ -208,14 +210,12 @@ export default function Profile() {
             </div>
 
             <div className="profile-card">
-              <h2>Daily goals</h2>
-              <p className="profile-card-sub">
-                Set targets for each tracker — used to give you something to aim for.
-              </p>
+              <h2>{t('profile.dailyGoals')}</h2>
+              <p className="profile-card-sub">{t('profile.goalsSubtitle')}</p>
 
               <div className="profile-field-row">
                 <div className="field">
-                  <label htmlFor="goalSleep">Sleep (hrs)</label>
+                  <label htmlFor="goalSleep">{t('profile.goalSleep')}</label>
                   <input
                     id="goalSleep"
                     type="number"
@@ -228,7 +228,7 @@ export default function Profile() {
                   />
                 </div>
                 <div className="field">
-                  <label htmlFor="goalWater">Water (L)</label>
+                  <label htmlFor="goalWater">{t('profile.goalWater')}</label>
                   <input
                     id="goalWater"
                     type="number"
@@ -241,7 +241,7 @@ export default function Profile() {
                   />
                 </div>
                 <div className="field">
-                  <label htmlFor="goalStudy">Study (hrs)</label>
+                  <label htmlFor="goalStudy">{t('profile.goalStudy')}</label>
                   <input
                     id="goalStudy"
                     type="number"
@@ -256,13 +256,11 @@ export default function Profile() {
               </div>
             </div>
             <div className="profile-card">
-              <h2>Quick add buttons</h2>
-              <p className="profile-card-sub">
-                Comma-separated amounts shown as tap-to-log buttons on each tracker page.
-              </p>
+              <h2>{t('profile.quickAddHeading')}</h2>
+              <p className="profile-card-sub">{t('profile.quickAddSubtitle')}</p>
 
               <div className="field">
-                <label htmlFor="quickAddSleep">Sleep (hrs)</label>
+                <label htmlFor="quickAddSleep">{t('profile.goalSleep')}</label>
                 <input
                   id="quickAddSleep"
                   type="text"
@@ -272,7 +270,7 @@ export default function Profile() {
                 />
               </div>
               <div className="field">
-                <label htmlFor="quickAddWater">Water (L)</label>
+                <label htmlFor="quickAddWater">{t('profile.goalWater')}</label>
                 <input
                   id="quickAddWater"
                   type="text"
@@ -282,7 +280,7 @@ export default function Profile() {
                 />
               </div>
               <div className="field">
-                <label htmlFor="quickAddStudy">Study (hrs)</label>
+                <label htmlFor="quickAddStudy">{t('profile.goalStudy')}</label>
                 <input
                   id="quickAddStudy"
                   type="text"
@@ -295,23 +293,19 @@ export default function Profile() {
           </div>
 
           <button className="auth-submit profile-submit" type="submit" disabled={saving}>
-            {saving ? 'Saving…' : 'Save profile'}
+            {saving ? t('profile.savingProfile') : t('profile.saveProfile')}
           </button>
         </form>
       )}
 
       <div className="overview-header profile-section-header">
-        <h1>Your data</h1>
-        <p>Download everything you've logged as a single JSON file.</p>
+        <h1>{t('profile.yourData')}</h1>
+        <p>{t('profile.dataSubtitle')}</p>
       </div>
 
       <div className="profile-card">
         {exportError && <div className="auth-error" role="alert">{exportError}</div>}
-        <p className="profile-card-sub">
-          Includes every entry across Sleep, Water, and Study (all-time, not just this
-          year), plus your profile details. Useful as a backup or if you ever want to
-          move your data elsewhere.
-        </p>
+        <p className="profile-card-sub">{t('profile.dataDescription')}</p>
         <button
           type="button"
           className="history-btn history-btn-primary"
@@ -324,13 +318,13 @@ export default function Profile() {
             if (error) setExportError(error.message)
           }}
         >
-          {exporting ? 'Preparing download…' : 'Download my data (JSON)'}
+          {exporting ? t('profile.preparingDownload') : t('profile.downloadData')}
         </button>
       </div>
 
       <div className="overview-header profile-section-header">
-        <h1>Account</h1>
-        <p>Update your login email or password.</p>
+        <h1>{t('profile.account')}</h1>
+        <p>{t('profile.accountSubtitle')}</p>
       </div>
 
       <AccountSettings />

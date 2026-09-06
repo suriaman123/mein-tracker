@@ -31,9 +31,9 @@ function CustomTooltip({ active, payload, unit }) {
   )
 }
 
-export default function TrendChart({ logs, valueField, unit, accentColor = '#8FA3F3' }) {
+export default function TrendChart({ logs, valueField, unit, accentColor = '#8FA3F3', emptyLabel }) {
   if (logs.length === 0) {
-    return <p className="tracker-empty">Log a few entries to see your trend here.</p>
+    return <p className="tracker-empty">{emptyLabel}</p>
   }
 
   // logs come sorted newest-first from useMonthlyStats; chart wants oldest-first

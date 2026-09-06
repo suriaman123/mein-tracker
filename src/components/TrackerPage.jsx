@@ -4,6 +4,7 @@ import { useAuth } from '../lib/AuthContext'
 import { useMonthlyStats } from '../lib/useMonthlyStats'
 import { useStreak } from '../lib/useStreak'
 import { useProfile } from '../lib/useProfile'
+import { useLanguage } from '../lib/LanguageContext'
 import { saveLog, deleteLog } from '../lib/trackerCrud'
 import TrendChart from './TrendChart'
 import Layout from './Layout'
@@ -17,14 +18,6 @@ const ACCENT_COLORS = {
   'accent-water': '#6FCF97',
   'accent-study': '#F2C94C',
   'accent-hidden': '#FF7A00',
-}
-
-function formatDate(dateStr) {
-  return new Date(dateStr + 'T00:00:00').toLocaleDateString('default', {
-    weekday: 'short',
-    month: 'short',
-    day: 'numeric',
-  })
 }
 
 // table: 'sleep_logs' | 'water_logs' | 'study_logs'
@@ -47,8 +40,17 @@ export default function TrackerPage({
   const stats = useMonthlyStats(table, valueField)
   const streakInfo = useStreak(table)
   const { profile } = useProfile()
+  const { t, locale } = useLanguage()
   const location = useLocation()
   const navigate = useNavigate()
+
+  function formatDate(dateStr) {
+    return new Date(dateStr + 'T00:00:00').toLocaleDateString(locale, {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+    })
+  }
 
   const quickAddSteps =
     (quickAddKey && profile?.quick_add_steps?.[quickAddKey]) || defaultQuickAddSteps
@@ -98,7 +100,7 @@ export default function TrackerPage({
 
     const numericValue = parseFloat(value)
     if (Number.isNaN(numericValue) || numericValue < min || numericValue > max) {
-      setError(`Enter a value between ${min} and ${max}.`)
+      setError(t('tracker.valueRangeError', { min, max }))
       return
     }
 
@@ -123,10 +125,8 @@ export default function TrackerPage({
     streakInfo.refresh()
 
     setSavedMessage(
-      `Saved entry for ${savedDateLabel}.` +
-        (logDate.slice(0, 7) !== today().slice(0, 7)
-          ? ' Since that date is outside this month, view it in "See all data".'
-          : '')
+      t('tracker.savedFor', { date: savedDateLabel }) +
+        (logDate.slice(0, 7) !== today().slice(0, 7) ? t('tracker.savedOutsideMonth') : '')
     )
     setTimeout(() => setSavedMessage(''), 5000)
   }
@@ -157,12 +157,14 @@ export default function TrackerPage({
 
     stats.refresh()
     streakInfo.refresh()
-    setSavedMessage(`Added ${step} ${unit} to today (total: ${newValue.toFixed(2)} ${unit}).`)
+    setSavedMessage(
+      t('tracker.quickAddedTotal', { step, unit, total: newValue.toFixed(2) })
+    )
     setTimeout(() => setSavedMessage(''), 5000)
   }
 
   async function handleDelete(id, dateLabel) {
-    const confirmed = window.confirm(`Delete the entry for ${dateLabel}? This can't be undone.`)
+    const confirmed = window.confirm(t('tracker.deleteConfirm', { date: dateLabel }))
     if (!confirmed) return
 
     setDeletingId(id)
@@ -186,14 +188,18 @@ export default function TrackerPage({
           <h1>{title}</h1>
           <p>
             {stats.count === 0
-              ? 'No entries yet this month.'
-              : `This month's average: ${stats.average.toFixed(1)} ${unit} over ${stats.count} ${stats.count === 1 ? 'entry' : 'entries'}.`}
-            {streakInfo.streak > 0 && ` 🔥 ${streakInfo.streak}-day streak.`}
+              ? t('tracker.noEntriesMonth')
+              : t(stats.count === 1 ? 'tracker.monthAverageOne' : 'tracker.monthAverageMany', {
+                  avg: stats.average.toFixed(1),
+                  unit,
+                  count: stats.count,
+                })}
+            {streakInfo.streak > 0 && t('tracker.streakSuffix', { count: streakInfo.streak })}
           </p>
         </div>
         {historyPath && (
           <Link to={historyPath} className="history-btn">
-            See all data →
+            {t('tracker.seeAllData')}
           </Link>
         )}
       </div>
@@ -202,7 +208,7 @@ export default function TrackerPage({
         <div className="tracker-form-col">
           {quickAddSteps.length > 0 && (
             <div className="quick-add-row">
-              <span className="quick-add-label">Quick add for today:</span>
+              <span className="quick-add-label">{t('tracker.quickAddLabel')}</span>
               <div className="quick-add-buttons">
                 {quickAddSteps.map((step) => (
                   <button
@@ -220,18 +226,18 @@ export default function TrackerPage({
           )}
 
           <form className="tracker-form" onSubmit={handleSubmit}>
-          <h2>{existingEntryForDate ? 'Edit entry' : 'Log an entry'}</h2>
+          <h2>{existingEntryForDate ? t('tracker.editEntry') : t('tracker.logEntry')}</h2>
 
           {error && <div className="auth-error" role="alert">{error}</div>}
           {savedMessage && <div className="auth-success" role="status" aria-live="polite">{savedMessage}</div>}
           {existingEntryForDate && (
             <div className="tracker-form-notice">
-              You already have an entry for this date — saving will update it.
+              {t('tracker.alreadyLogged')}
             </div>
           )}
 
           <div className="field">
-            <label htmlFor="logDate">Date</label>
+            <label htmlFor="logDate">{t('tracker.dateLabel')}</label>
             <input
               id="logDate"
               type="date"
@@ -258,40 +264,41 @@ export default function TrackerPage({
           </div>
 
           <div className="field">
-            <label htmlFor="notes">Notes (optional)</label>
+            <label htmlFor="notes">{t('tracker.notesLabel')}</label>
             <input
               id="notes"
               type="text"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="Anything worth remembering about this day"
+              placeholder={t('tracker.notesPlaceholder')}
             />
           </div>
 
           <button className="auth-submit" type="submit" disabled={saving}>
-            {saving ? 'Saving…' : existingEntryForDate ? 'Update entry' : 'Save entry'}
+            {saving ? t('tracker.savingEntry') : existingEntryForDate ? t('tracker.updateEntry') : t('tracker.saveEntry')}
           </button>
         </form>
         </div>
 
         <div className="tracker-right-col">
           <div className="tracker-chart-card">
-            <h2>This month's trend</h2>
+            <h2>{t('tracker.thisMonthsTrend')}</h2>
             <TrendChart
               logs={stats.logs}
               valueField={valueField}
               unit={unit}
               accentColor={ACCENT_COLORS[accentClass]}
+              emptyLabel={t('tracker.logForTrend')}
             />
           </div>
 
           <div className="tracker-list">
-            <h2>Entries</h2>
+            <h2>{t('tracker.entriesHeading')}</h2>
 
             {stats.loading ? (
-              <p className="tracker-empty">Loading…</p>
+              <p className="tracker-empty">{t('tracker.loading')}</p>
             ) : stats.logs.length === 0 ? (
-              <p className="tracker-empty">Nothing logged yet — add your first entry.</p>
+              <p className="tracker-empty">{t('tracker.nothingLogged')}</p>
             ) : (
               <ul className="log-list">
                 {stats.logs.map((entry) => (
@@ -307,19 +314,19 @@ export default function TrackerPage({
                       <button
                         type="button"
                         className="log-action-btn"
-                        aria-label={`Edit entry for ${formatDate(entry.log_date)}`}
+                        aria-label={t('tracker.editAriaLabel', { date: formatDate(entry.log_date) })}
                         onClick={() => loadEntryIntoForm(entry)}
                       >
-                        Edit
+                        {t('tracker.editButton')}
                       </button>
                       <button
                         type="button"
                         className="log-action-btn log-action-danger"
-                        aria-label={`Delete entry for ${formatDate(entry.log_date)}`}
+                        aria-label={t('tracker.deleteAriaLabel', { date: formatDate(entry.log_date) })}
                         disabled={deletingId === entry.id}
                         onClick={() => handleDelete(entry.id, formatDate(entry.log_date))}
                       >
-                        {deletingId === entry.id ? 'Deleting…' : 'Delete'}
+                        {deletingId === entry.id ? t('tracker.deletingButton') : t('tracker.deleteButton')}
                       </button>
                     </div>
                   </li>

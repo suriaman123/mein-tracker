@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../lib/AuthContext'
+import { useLanguage } from '../lib/LanguageContext'
 import './Auth.css'
 
 export default function Login() {
   const { signIn } = useAuth()
+  const { t } = useLanguage()
   const navigate = useNavigate()
 
   const [email, setEmail] = useState('')
@@ -32,19 +34,19 @@ export default function Login() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <div className="phase-dots">
+        <div className="phase-dots" aria-hidden="true">
           <span />
           <span />
           <span />
         </div>
-        <h1>Welcome back</h1>
-        <p className="auth-subtitle">Log in to see this month's overview.</p>
+        <h1>{t('auth.loginTitle')}</h1>
+        <p className="auth-subtitle">{t('auth.loginSubtitle')}</p>
 
         <form className="auth-form" onSubmit={handleSubmit}>
           {error && <div className="auth-error" role="alert">{error}</div>}
 
           <div className="field">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">{t('auth.email')}</label>
             <input
               id="email"
               type="email"
@@ -56,7 +58,7 @@ export default function Login() {
           </div>
 
           <div className="field">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">{t('auth.password')}</label>
             <input
               id="password"
               type="password"
@@ -68,12 +70,12 @@ export default function Login() {
           </div>
 
           <button className="auth-submit" type="submit" disabled={submitting}>
-            {submitting ? 'Logging in…' : 'Log in'}
+            {submitting ? t('auth.loggingIn') : t('auth.loginButton')}
           </button>
         </form>
 
         <p className="auth-switch">
-          Don't have an account? <Link to="/register">Register</Link>
+          {t('auth.noAccount')} <Link to="/register">{t('auth.registerLink')}</Link>
         </p>
       </div>
     </div>

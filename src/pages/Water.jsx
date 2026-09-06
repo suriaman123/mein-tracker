@@ -1,13 +1,15 @@
 import TrackerPage from '../components/TrackerPage'
+import { useLanguage } from '../lib/LanguageContext'
 
 export default function Water() {
+  const { t } = useLanguage()
   return (
     <TrackerPage
-      title="Water intake tracker"
+      title={t('tracker.waterTitle')}
       table="water_logs"
       valueField="liters"
-      unit="L"
-      valueLabel="Liters drunk"
+      unit={t('common.liters')}
+      valueLabel={t('tracker.litersDrunk')}
       accentClass="accent-water"
       min={0}
       max={15}

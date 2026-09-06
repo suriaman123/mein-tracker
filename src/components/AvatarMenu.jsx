@@ -4,6 +4,7 @@ import { useAuth } from '../lib/AuthContext'
 import { useTheme } from '../lib/ThemeContext'
 import { useProfile } from '../lib/useProfile'
 import { useHiddenMode } from '../lib/HiddenModeContext'
+import { useLanguage, LANGUAGES } from '../lib/LanguageContext'
 import './AvatarMenu.css'
 
 function initialsFor(email) {
@@ -17,6 +18,7 @@ export default function AvatarMenu() {
   const { theme, toggleTheme } = useTheme()
   const { profile } = useProfile()
   const { toggleHidden } = useHiddenMode()
+  const { language, setLanguage, t } = useLanguage()
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
 
@@ -62,7 +64,7 @@ export default function AvatarMenu() {
       <button
         className="avatar-trigger"
         onClick={handleAvatarClick}
-        aria-label="Account menu"
+        aria-label={t('avatarMenu.ariaLabel')}
         aria-haspopup="menu"
         aria-expanded={open}
       >
@@ -85,19 +87,34 @@ export default function AvatarMenu() {
             role="menuitem"
             onClick={() => setOpen(false)}
           >
-            Profile
+            {t('avatarMenu.profile')}
           </Link>
 
           <button className="avatar-dropdown-item" role="menuitem" onClick={toggleTheme}>
-            {theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            {theme === 'dark' ? t('avatarMenu.lightMode') : t('avatarMenu.darkMode')}
           </button>
+
+          <div className="avatar-dropdown-lang" role="menuitem">
+            <span className="avatar-dropdown-lang-label">{t('avatarMenu.language')}</span>
+            <div className="avatar-dropdown-lang-options">
+              {LANGUAGES.map((lang) => (
+                <button
+                  key={lang.code}
+                  className={`lang-option-btn${language === lang.code ? ' lang-option-active' : ''}`}
+                  onClick={() => setLanguage(lang.code)}
+                >
+                  {lang.label}
+                </button>
+              ))}
+            </div>
+          </div>
 
           <button
             className="avatar-dropdown-item avatar-dropdown-danger"
             role="menuitem"
             onClick={signOut}
           >
-            Log out
+            {t('avatarMenu.logout')}
           </button>
         </div>
       )}
