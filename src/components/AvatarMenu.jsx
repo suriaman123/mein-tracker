@@ -90,6 +90,15 @@ export default function AvatarMenu() {
             {t('avatarMenu.profile')}
           </Link>
 
+          <Link
+            to="/achievements"
+            className="avatar-dropdown-item"
+            role="menuitem"
+            onClick={() => setOpen(false)}
+          >
+            {t('achievements.navLabel')}
+          </Link>
+
           <button className="avatar-dropdown-item" role="menuitem" onClick={toggleTheme}>
             {theme === 'dark' ? t('avatarMenu.lightMode') : t('avatarMenu.darkMode')}
           </button>

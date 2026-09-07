@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useYearlyStats } from '../lib/useYearlyStats'
 import { useLanguage } from '../lib/LanguageContext'
+import { CUSTOM_COLOR_PRESETS } from '../lib/colorPresets'
 import MonthlyTrendChart from './MonthlyTrendChart'
 import Layout from './Layout'
 import './TrackerHistory.css'
@@ -11,6 +12,7 @@ const ACCENT_COLORS = {
   'accent-water': '#6FCF97',
   'accent-study': '#F2C94C',
   'accent-hidden': '#FF7A00',
+  ...Object.fromEntries(CUSTOM_COLOR_PRESETS.map((c) => [`accent-${c.key}`, c.hex])),
 }
 
 function getMonthNames(locale, format = 'long') {
@@ -20,8 +22,8 @@ function getMonthNames(locale, format = 'long') {
 }
 
 // table: 'sleep_logs' | 'water_logs' | 'study_logs'
-export default function TrackerHistory({ title, table, valueField, unit, accentClass, backPath }) {
-  const stats = useYearlyStats(table)
+export default function TrackerHistory({ title, table, valueField, unit, accentClass, backPath, extraFilter }) {
+  const stats = useYearlyStats(table, extraFilter)
   const navigate = useNavigate()
   const { t, locale } = useLanguage()
   const year = new Date().getFullYear()

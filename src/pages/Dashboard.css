@@ -164,3 +164,27 @@
 .accent-hidden {
   --card-accent: #FF7A00;
 }
+
+.accent-custom-1 {
+  --card-accent: #BB86FC;
+}
+
+.accent-custom-2 {
+  --card-accent: #F783AC;
+}
+
+.accent-custom-3 {
+  --card-accent: #4ECDC4;
+}
+
+.accent-custom-4 {
+  --card-accent: #FF9F1C;
+}
+
+.accent-custom-5 {
+  --card-accent: #FF6B6B;
+}
+
+.accent-custom-6 {
+  --card-accent: #22D3EE;
+}

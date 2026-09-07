@@ -25,7 +25,33 @@ function computeStreak(dateStrings) {
   return streak
 }
 
-export function useStreak(table) {
+// Finds the longest run of consecutive days anywhere in history — used
+// for "longest streak ever" on the Achievements page, distinct from the
+// "current active streak" above.
+export function computeLongestStreak(dateStrings) {
+  if (dateStrings.length === 0) return 0
+
+  const sortedDates = [...new Set(dateStrings)].sort()
+  let longest = 1
+  let current = 1
+
+  for (let i = 1; i < sortedDates.length; i++) {
+    const prev = new Date(sortedDates[i - 1] + 'T00:00:00')
+    const curr = new Date(sortedDates[i] + 'T00:00:00')
+    const dayDiff = Math.round((curr - prev) / (1000 * 60 * 60 * 24))
+
+    if (dayDiff === 1) {
+      current += 1
+      longest = Math.max(longest, current)
+    } else {
+      current = 1
+    }
+  }
+
+  return longest
+}
+
+export function useStreak(table, extraFilter) {
   const { user } = useAuth()
   const [streak, setStreak] = useState(0)
   const [loading, setLoading] = useState(true)
@@ -39,17 +65,23 @@ export function useStreak(table) {
     const cutoff = new Date()
     cutoff.setDate(cutoff.getDate() - 60)
 
-    const { data, error } = await supabase
+    let query = supabase
       .from(table)
       .select('log_date')
       .eq('user_id', user.id)
       .gte('log_date', toISODate(cutoff))
 
+    if (extraFilter) {
+      query = query.eq(extraFilter.column, extraFilter.value)
+    }
+
+    const { data, error } = await query
+
     if (!error && data) {
       setStreak(computeStreak(data.map((r) => r.log_date)))
     }
     setLoading(false)
-  }, [table, user])
+  }, [table, user, extraFilter?.column, extraFilter?.value])
 
   useEffect(() => {
     refresh()

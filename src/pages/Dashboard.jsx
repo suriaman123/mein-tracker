@@ -3,14 +3,17 @@ import { useMonthlyStats } from '../lib/useMonthlyStats'
 import { useProfile } from '../lib/useProfile'
 import { useStreak } from '../lib/useStreak'
 import { useLanguage } from '../lib/LanguageContext'
+import { useCustomTrackers } from '../lib/useCustomTrackers'
 import Layout from '../components/Layout'
 import SummaryCard from '../components/SummaryCard'
+import CustomTrackerSummaryCard from '../components/CustomTrackerSummaryCard'
 import './Dashboard.css'
 
 export default function Dashboard() {
   const { user } = useAuth()
   const { profile } = useProfile()
   const { t, locale } = useLanguage()
+  const { trackers: customTrackers } = useCustomTrackers()
   const sleep = useMonthlyStats('sleep_logs', 'hours')
   const water = useMonthlyStats('water_logs', 'liters')
   const study = useMonthlyStats('study_logs', 'hours')
@@ -66,6 +69,9 @@ export default function Dashboard() {
           goal={profile?.goal_study_hours}
           streak={studyStreak.streak}
         />
+        {customTrackers.map((tracker) => (
+          <CustomTrackerSummaryCard key={tracker.id} tracker={tracker} />
+        ))}
       </div>
     </Layout>
   )

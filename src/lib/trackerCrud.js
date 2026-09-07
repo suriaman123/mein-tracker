@@ -1,9 +1,13 @@
 import { supabase } from './supabaseClient'
 
-// Upsert on (user_id, log_date): submitting the same date again
-// naturally edits that day's entry instead of creating a duplicate,
-// since the schema has a unique constraint on (user_id, log_date).
-export async function saveLog(table, { userId, logDate, valueField, value, notes }) {
+// Upsert on (user_id, log_date) by default: submitting the same date
+// again naturally edits that day's entry instead of creating a duplicate.
+// Custom trackers share one table distinguished by tracker_id, so they
+// pass extraFields: { tracker_id } and conflictTarget: 'tracker_id,log_date'.
+export async function saveLog(
+  table,
+  { userId, logDate, valueField, value, notes, extraFields, conflictTarget }
+) {
   const { data, error } = await supabase
     .from(table)
     .upsert(
@@ -12,8 +16,9 @@ export async function saveLog(table, { userId, logDate, valueField, value, notes
         log_date: logDate,
         [valueField]: value,
         notes: notes || null,
+        ...extraFields,
       },
-      { onConflict: 'user_id,log_date' }
+      { onConflict: conflictTarget || 'user_id,log_date' }
     )
     .select()
     .single()

@@ -12,9 +12,11 @@ function getMonthBounds() {
   return { start: toISODate(start), end: toISODate(end) }
 }
 
-// table: 'sleep_logs' | 'water_logs' | 'study_logs'
-// valueField: 'hours' | 'liters'
-export function useMonthlyStats(table, valueField) {
+// table: 'sleep_logs' | 'water_logs' | 'study_logs' | 'custom_tracker_logs'
+// valueField: 'hours' | 'liters' | 'value'
+// extraFilter: optional { column, value } — used by custom trackers, which
+// all share one table distinguished by tracker_id
+export function useMonthlyStats(table, valueField, extraFilter) {
   const { user } = useAuth()
   const [logs, setLogs] = useState([])
   const [loading, setLoading] = useState(true)
@@ -27,13 +29,18 @@ export function useMonthlyStats(table, valueField) {
 
     const { start, end } = getMonthBounds()
 
-    const { data, error } = await supabase
+    let query = supabase
       .from(table)
       .select('*')
       .eq('user_id', user.id)
       .gte('log_date', start)
       .lt('log_date', end)
-      .order('log_date', { ascending: false })
+
+    if (extraFilter) {
+      query = query.eq(extraFilter.column, extraFilter.value)
+    }
+
+    const { data, error } = await query.order('log_date', { ascending: false })
 
     if (error) {
       setError(error.message)
@@ -43,7 +50,7 @@ export function useMonthlyStats(table, valueField) {
 
     setLogs(data)
     setLoading(false)
-  }, [table, user])
+  }, [table, user, extraFilter?.column, extraFilter?.value])
 
   useEffect(() => {
     refresh()

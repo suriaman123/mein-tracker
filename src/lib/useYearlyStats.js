@@ -7,7 +7,7 @@ function getYearBounds() {
   return { start: `${year}-01-01`, end: `${year + 1}-01-01` }
 }
 
-export function useYearlyStats(table) {
+export function useYearlyStats(table, extraFilter) {
   const { user } = useAuth()
   const [logs, setLogs] = useState([])
   const [loading, setLoading] = useState(true)
@@ -20,13 +20,18 @@ export function useYearlyStats(table) {
 
     const { start, end } = getYearBounds()
 
-    const { data, error } = await supabase
+    let query = supabase
       .from(table)
       .select('*')
       .eq('user_id', user.id)
       .gte('log_date', start)
       .lt('log_date', end)
-      .order('log_date', { ascending: false })
+
+    if (extraFilter) {
+      query = query.eq(extraFilter.column, extraFilter.value)
+    }
+
+    const { data, error } = await query.order('log_date', { ascending: false })
 
     if (error) {
       setError(error.message)
@@ -36,7 +41,7 @@ export function useYearlyStats(table) {
 
     setLogs(data)
     setLoading(false)
-  }, [table, user])
+  }, [table, user, extraFilter?.column, extraFilter?.value])
 
   useEffect(() => {
     refresh()

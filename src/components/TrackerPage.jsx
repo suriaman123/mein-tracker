@@ -7,6 +7,7 @@ import { useProfile } from '../lib/useProfile'
 import { useLanguage } from '../lib/LanguageContext'
 import { useConfirm } from '../lib/ConfirmContext'
 import { saveLog, deleteLog } from '../lib/trackerCrud'
+import { CUSTOM_COLOR_PRESETS } from '../lib/colorPresets'
 import TrendChart from './TrendChart'
 import Layout from './Layout'
 import './TrackerPage.css'
@@ -19,10 +20,11 @@ const ACCENT_COLORS = {
   'accent-water': '#6FCF97',
   'accent-study': '#F2C94C',
   'accent-hidden': '#FF7A00',
+  ...Object.fromEntries(CUSTOM_COLOR_PRESETS.map((c) => [`accent-${c.key}`, c.hex])),
 }
 
-// table: 'sleep_logs' | 'water_logs' | 'study_logs'
-// valueField: 'hours' | 'liters'
+// table: 'sleep_logs' | 'water_logs' | 'study_logs' | 'custom_tracker_logs'
+// valueField: 'hours' | 'liters' | 'value'
 export default function TrackerPage({
   title,
   table,
@@ -36,10 +38,13 @@ export default function TrackerPage({
   historyPath,
   quickAddSteps: defaultQuickAddSteps = [],
   quickAddKey,
+  extraFilter,
+  extraInsertFields,
+  conflictTarget,
 }) {
   const { user } = useAuth()
-  const stats = useMonthlyStats(table, valueField)
-  const streakInfo = useStreak(table)
+  const stats = useMonthlyStats(table, valueField, extraFilter)
+  const streakInfo = useStreak(table, extraFilter)
   const { profile } = useProfile()
   const { t, locale } = useLanguage()
   const confirm = useConfirm()
@@ -113,6 +118,8 @@ export default function TrackerPage({
       valueField,
       value: numericValue,
       notes,
+      extraFields: extraInsertFields,
+      conflictTarget,
     })
     setSaving(false)
 
@@ -148,6 +155,8 @@ export default function TrackerPage({
       valueField,
       value: newValue,
       notes: existing?.notes || '',
+      extraFields: extraInsertFields,
+      conflictTarget,
     })
 
     setQuickAdding(null)

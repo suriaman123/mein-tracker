@@ -1,0 +1,91 @@
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.25rem;
+}
+
+.achievement-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.achievement-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--card-accent, var(--accent));
+}
+
+.achievement-card-header h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.2rem;
+  margin: 0 0 1.1rem;
+}
+
+.achievement-bests {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.achievement-best {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.achievement-best-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.achievement-best-value {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+.achievement-best-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.78rem;
+}
+
+.badge-icon {
+  font-size: 0.9rem;
+}
+
+.badge-unlocked {
+  border-color: var(--card-accent, var(--accent));
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
+.badge-locked {
+  color: var(--text-muted);
+  opacity: 0.7;
+}

@@ -129,3 +129,12 @@
 [data-hidden='true'] .topnav a.active {
   background: rgba(255, 122, 0, 0.15);
 }
+
+.topnav-add-link {
+  border: 1px dashed var(--border);
+  color: var(--text-muted) !important;
+}
+
+.topnav-add-link:hover {
+  border-color: var(--accent);
+}
