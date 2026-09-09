@@ -12,10 +12,11 @@ const ACCENT_COLORS = {
   ...Object.fromEntries(CUSTOM_COLOR_PRESETS.map((c) => [`accent-${c.key}`, c.hex])),
 }
 
-export default function TrackerAchievements({ title, table, valueField, unit, accentClass, extraFilter }) {
+export default function TrackerAchievements({ title, table, valueField, unit, accentClass, extraFilter, valueType = 'number' }) {
   const { t, locale } = useLanguage()
   const stats = useAllTimeStats(table, valueField, extraFilter)
   const color = ACCENT_COLORS[accentClass] || '#8FA3F3'
+  const isBoolean = valueType === 'boolean'
 
   function formatDate(dateStr) {
     return new Date(dateStr + 'T00:00:00').toLocaleDateString(locale, {
@@ -40,6 +41,8 @@ export default function TrackerAchievements({ title, table, valueField, unit, ac
     )
   }
 
+  const yesCount = isBoolean ? stats.logs.filter((l) => Number(l[valueField]) >= 1).length : 0
+
   return (
     <div className="achievement-card" style={{ '--card-accent': color }}>
       <div className="achievement-card-header">
@@ -47,30 +50,53 @@ export default function TrackerAchievements({ title, table, valueField, unit, ac
       </div>
 
       <div className="achievement-bests">
-        <div className="achievement-best">
-          <span className="achievement-best-label">{t('achievements.bestDay')}</span>
-          <span className="achievement-best-value">
-            {stats.best.value.toFixed(2)} {unit}
-          </span>
-          <span className="achievement-best-sub">{formatDate(stats.best.date)}</span>
-        </div>
+        {isBoolean ? (
+          <>
+            <div className="achievement-best">
+              <span className="achievement-best-label">{t('trackerExtra.adherenceRate')}</span>
+              <span className="achievement-best-value">
+                {Math.round((yesCount / stats.count) * 100)}%
+              </span>
+              <span className="achievement-best-sub">
+                {t('trackerExtra.daysYes', { count: yesCount })}
+              </span>
+            </div>
 
-        <div className="achievement-best">
-          <span className="achievement-best-label">{t('achievements.longestStreak')}</span>
-          <span className="achievement-best-value">
-            {stats.longestStreak} {t('achievements.daysUnit')}
-          </span>
-        </div>
+            <div className="achievement-best">
+              <span className="achievement-best-label">{t('achievements.longestStreak')}</span>
+              <span className="achievement-best-value">
+                {stats.longestStreak} {t('achievements.daysUnit')}
+              </span>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="achievement-best">
+              <span className="achievement-best-label">{t('achievements.bestDay')}</span>
+              <span className="achievement-best-value">
+                {stats.best.value.toFixed(2)} {unit}
+              </span>
+              <span className="achievement-best-sub">{formatDate(stats.best.date)}</span>
+            </div>
 
-        <div className="achievement-best">
-          <span className="achievement-best-label">{t('achievements.allTimeAverage')}</span>
-          <span className="achievement-best-value">
-            {stats.average.toFixed(2)} {unit}
-          </span>
-          <span className="achievement-best-sub">
-            {stats.count} {t('achievements.entriesUnit')}
-          </span>
-        </div>
+            <div className="achievement-best">
+              <span className="achievement-best-label">{t('achievements.longestStreak')}</span>
+              <span className="achievement-best-value">
+                {stats.longestStreak} {t('achievements.daysUnit')}
+              </span>
+            </div>
+
+            <div className="achievement-best">
+              <span className="achievement-best-label">{t('achievements.allTimeAverage')}</span>
+              <span className="achievement-best-value">
+                {stats.average.toFixed(2)} {unit}
+              </span>
+              <span className="achievement-best-sub">
+                {stats.count} {t('achievements.entriesUnit')}
+              </span>
+            </div>
+          </>
+        )}
       </div>
 
       <div className="badge-row">

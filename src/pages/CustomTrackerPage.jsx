@@ -36,6 +36,7 @@ export default function CustomTrackerPage() {
       extraFilter={{ column: 'tracker_id', value: trackerId }}
       extraInsertFields={{ tracker_id: trackerId }}
       conflictTarget="tracker_id,log_date"
+      valueType={tracker.value_type}
     />
   )
 }

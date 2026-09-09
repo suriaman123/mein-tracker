@@ -39,7 +39,7 @@ export default function Layout({ children }) {
                 {tracker.name}
               </NavLink>
             ))}
-            <NavLink to="/trackers/manage" className="topnav-add-link">
+            <NavLink to="/settings" className="topnav-add-link">
               {t('customTrackers.addTrackerNav')}
             </NavLink>
             {hidden && <NavLink to="/personal">हस्तमैथुन</NavLink>}

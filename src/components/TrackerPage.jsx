@@ -41,6 +41,7 @@ export default function TrackerPage({
   extraFilter,
   extraInsertFields,
   conflictTarget,
+  valueType = 'number',
 }) {
   const { user } = useAuth()
   const stats = useMonthlyStats(table, valueField, extraFilter)
@@ -50,6 +51,7 @@ export default function TrackerPage({
   const confirm = useConfirm()
   const location = useLocation()
   const navigate = useNavigate()
+  const isBoolean = valueType === 'boolean'
 
   function formatDate(dateStr) {
     return new Date(dateStr + 'T00:00:00').toLocaleDateString(locale, {
@@ -105,10 +107,15 @@ export default function TrackerPage({
     e.preventDefault()
     setError('')
 
-    const numericValue = parseFloat(value)
-    if (Number.isNaN(numericValue) || numericValue < min || numericValue > max) {
-      setError(t('tracker.valueRangeError', { min, max }))
-      return
+    let numericValue
+    if (isBoolean) {
+      numericValue = value === '1' ? 1 : 0
+    } else {
+      numericValue = parseFloat(value)
+      if (Number.isNaN(numericValue) || numericValue < min || numericValue > max) {
+        setError(t('tracker.valueRangeError', { min, max }))
+        return
+      }
     }
 
     setSaving(true)
@@ -201,8 +208,8 @@ export default function TrackerPage({
             {stats.count === 0
               ? t('tracker.noEntriesMonth')
               : t(stats.count === 1 ? 'tracker.monthAverageOne' : 'tracker.monthAverageMany', {
-                  avg: stats.average.toFixed(1),
-                  unit,
+                  avg: isBoolean ? (stats.average * 100).toFixed(0) : stats.average.toFixed(1),
+                  unit: isBoolean ? '%' : unit,
                   count: stats.count,
                 })}
             {streakInfo.streak > 0 && t('tracker.streakSuffix', { count: streakInfo.streak })}
@@ -259,20 +266,33 @@ export default function TrackerPage({
             />
           </div>
 
-          <div className="field">
-            <label htmlFor="value">{valueLabel}</label>
-            <input
-              id="value"
-              type="number"
-              min={min}
-              max={max}
-              step={step}
-              required
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              placeholder={`e.g. ${((min + max) / 4).toFixed(1)}`}
-            />
-          </div>
+          {isBoolean ? (
+            <div className="field field-checkbox">
+              <label className="checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={value === '1'}
+                  onChange={(e) => setValue(e.target.checked ? '1' : '0')}
+                />
+                {t('trackerExtra.booleanQuestion')}
+              </label>
+            </div>
+          ) : (
+            <div className="field">
+              <label htmlFor="value">{valueLabel}</label>
+              <input
+                id="value"
+                type="number"
+                min={min}
+                max={max}
+                step={step}
+                required
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                placeholder={`e.g. ${((min + max) / 4).toFixed(1)}`}
+              />
+            </div>
+          )}
 
           <div className="field">
             <label htmlFor="notes">{t('tracker.notesLabel')}</label>
@@ -317,7 +337,11 @@ export default function TrackerPage({
                     <div className="log-row-main">
                       <span className="log-date">{formatDate(entry.log_date)}</span>
                       <span className="log-value">
-                        {Number(entry[valueField]).toFixed(2)} {unit}
+                        {isBoolean
+                          ? Number(entry[valueField]) >= 1
+                            ? t('common2.yes')
+                            : t('common2.no')
+                          : `${Number(entry[valueField]).toFixed(2)} ${unit}`}
                       </span>
                     </div>
                     {entry.notes && <div className="log-notes">{entry.notes}</div>}

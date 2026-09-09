@@ -3,9 +3,8 @@ import { useAuth } from '../lib/AuthContext'
 import { useProfile } from '../lib/useProfile'
 import { useLanguage } from '../lib/LanguageContext'
 import { saveProfile, uploadAvatar } from '../lib/profileCrud'
-import { downloadAllData } from '../lib/exportData'
 import Layout from '../components/Layout'
-import AccountSettings from './AccountSettings'
+import AchievementsSection from '../components/AchievementsSection'
 import './Profile.css'
 
 const DEFAULT_QUICK_ADD = {
@@ -45,9 +44,6 @@ export default function Profile() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
-
-  const [exporting, setExporting] = useState(false)
-  const [exportError, setExportError] = useState('')
 
   useEffect(() => {
     if (!profile) return
@@ -299,35 +295,11 @@ export default function Profile() {
       )}
 
       <div className="overview-header profile-section-header">
-        <h1>{t('profile.yourData')}</h1>
-        <p>{t('profile.dataSubtitle')}</p>
+        <h1>{t('profileExtra.achievementsHeading')}</h1>
+        <p>{t('profileExtra.achievementsSubtitle')}</p>
       </div>
 
-      <div className="profile-card">
-        {exportError && <div className="auth-error" role="alert">{exportError}</div>}
-        <p className="profile-card-sub">{t('profile.dataDescription')}</p>
-        <button
-          type="button"
-          className="history-btn history-btn-primary"
-          disabled={exporting}
-          onClick={async () => {
-            setExportError('')
-            setExporting(true)
-            const { error } = await downloadAllData(user.id, profile)
-            setExporting(false)
-            if (error) setExportError(error.message)
-          }}
-        >
-          {exporting ? t('profile.preparingDownload') : t('profile.downloadData')}
-        </button>
-      </div>
-
-      <div className="overview-header profile-section-header">
-        <h1>{t('profile.account')}</h1>
-        <p>{t('profile.accountSubtitle')}</p>
-      </div>
-
-      <AccountSettings />
+      <AchievementsSection />
     </Layout>
   )
 }

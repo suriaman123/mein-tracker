@@ -228,4 +228,32 @@ export default {
     daysUnit: 'दिन',
     entriesUnit: 'प्रविष्टियां',
   },
+
+  common2: {
+    yes: 'हां',
+    no: 'नहीं',
+  },
+
+  settingsPage: {
+    navLabel: 'सेटिंग्स',
+    pageTitle: 'सेटिंग्स',
+    pageSubtitle: 'अपने ट्रैकर, खाता और डेटा प्रबंधित करें।',
+    trackersHeading: 'कस्टम ट्रैकर',
+    accountHeading: 'खाता',
+    dataHeading: 'आपका डेटा',
+  },
+
+  profileExtra: {
+    achievementsHeading: 'उपलब्धियां',
+    achievementsSubtitle: 'आपके सभी ट्रैकर में व्यक्तिगत सर्वश्रेष्ठ प्रदर्शन और बैज।',
+  },
+
+  trackerExtra: {
+    valueTypeLabel: 'प्रकार',
+    valueTypeNumber: 'संख्या',
+    valueTypeBoolean: 'हां / नहीं',
+    booleanQuestion: 'क्या यह हुआ?',
+    adherenceRate: 'पालन दर',
+    daysYes: '{count} दिन हां चिह्नित',
+  },
 }

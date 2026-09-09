@@ -11,10 +11,9 @@ import StudyHistory from './pages/StudyHistory'
 import Personal from './pages/Personal'
 import PersonalHistory from './pages/PersonalHistory'
 import Profile from './pages/Profile'
-import ManageTrackers from './pages/ManageTrackers'
+import Settings from './pages/Settings'
 import CustomTrackerPage from './pages/CustomTrackerPage'
 import CustomTrackerHistoryPage from './pages/CustomTrackerHistoryPage'
-import Achievements from './pages/Achievements'
 import ProtectedRoute from './components/ProtectedRoute'
 import './App.css'
 
@@ -37,11 +36,10 @@ function App() {
       <Route path="/study/history" element={protect(<StudyHistory />)} />
       <Route path="/personal" element={protect(<Personal />)} />
       <Route path="/personal/history" element={protect(<PersonalHistory />)} />
-      <Route path="/trackers/manage" element={protect(<ManageTrackers />)} />
       <Route path="/custom/:trackerId" element={protect(<CustomTrackerPage />)} />
       <Route path="/custom/:trackerId/history" element={protect(<CustomTrackerHistoryPage />)} />
-      <Route path="/achievements" element={protect(<Achievements />)} />
       <Route path="/profile" element={protect(<Profile />)} />
+      <Route path="/settings" element={protect(<Settings />)} />
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   )

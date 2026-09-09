@@ -227,4 +227,32 @@ export default {
     daysUnit: 'days',
     entriesUnit: 'entries',
   },
+
+  common2: {
+    yes: 'Yes',
+    no: 'No',
+  },
+
+  settingsPage: {
+    navLabel: 'Settings',
+    pageTitle: 'Settings',
+    pageSubtitle: 'Manage your trackers, account, and data.',
+    trackersHeading: 'Custom trackers',
+    accountHeading: 'Account',
+    dataHeading: 'Your data',
+  },
+
+  profileExtra: {
+    achievementsHeading: 'Achievements',
+    achievementsSubtitle: 'Personal bests and badges earned across all your trackers.',
+  },
+
+  trackerExtra: {
+    valueTypeLabel: 'Type',
+    valueTypeNumber: 'Number',
+    valueTypeBoolean: 'Yes / No',
+    booleanQuestion: 'Did this happen?',
+    adherenceRate: 'Adherence rate',
+    daysYes: '{count} days marked yes',
+  },
 }

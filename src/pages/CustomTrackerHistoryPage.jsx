@@ -30,6 +30,7 @@ export default function CustomTrackerHistoryPage() {
       accentClass={`accent-${tracker.color_key}`}
       backPath={`/custom/${trackerId}`}
       extraFilter={{ column: 'tracker_id', value: trackerId }}
+      valueType={tracker.value_type}
     />
   )
 }

@@ -229,4 +229,32 @@ export default {
     daysUnit: 'Tage',
     entriesUnit: 'Einträge',
   },
+
+  common2: {
+    yes: 'Ja',
+    no: 'Nein',
+  },
+
+  settingsPage: {
+    navLabel: 'Einstellungen',
+    pageTitle: 'Einstellungen',
+    pageSubtitle: 'Verwalte deine Tracker, dein Konto und deine Daten.',
+    trackersHeading: 'Eigene Tracker',
+    accountHeading: 'Konto',
+    dataHeading: 'Deine Daten',
+  },
+
+  profileExtra: {
+    achievementsHeading: 'Erfolge',
+    achievementsSubtitle: 'Persönliche Bestleistungen und Abzeichen über alle deine Tracker hinweg.',
+  },
+
+  trackerExtra: {
+    valueTypeLabel: 'Typ',
+    valueTypeNumber: 'Zahl',
+    valueTypeBoolean: 'Ja / Nein',
+    booleanQuestion: 'Ist das passiert?',
+    adherenceRate: 'Erfüllungsrate',
+    daysYes: '{count} Tage mit Ja markiert',
+  },
 }

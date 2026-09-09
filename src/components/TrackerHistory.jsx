@@ -22,13 +22,21 @@ function getMonthNames(locale, format = 'long') {
 }
 
 // table: 'sleep_logs' | 'water_logs' | 'study_logs'
-export default function TrackerHistory({ title, table, valueField, unit, accentClass, backPath, extraFilter }) {
+export default function TrackerHistory({ title, table, valueField, unit, accentClass, backPath, extraFilter, valueType = 'number' }) {
   const stats = useYearlyStats(table, extraFilter)
   const navigate = useNavigate()
   const { t, locale } = useLanguage()
+  const isBoolean = valueType === 'boolean'
   const year = new Date().getFullYear()
   const monthNames = getMonthNames(locale, 'long')
   const monthNamesShort = getMonthNames(locale, 'short')
+
+  function formatValue(entry) {
+    if (isBoolean) {
+      return Number(entry[valueField]) >= 1 ? t('common2.yes') : t('common2.no')
+    }
+    return Number(entry[valueField]).toFixed(2)
+  }
 
   function formatDate(dateStr) {
     return new Date(dateStr + 'T00:00:00').toLocaleDateString(locale, {
@@ -160,7 +168,7 @@ export default function TrackerHistory({ title, table, valueField, unit, accentC
               <thead>
                 <tr>
                   <th>{t('trackerHistory.colDate')}</th>
-                  <th>{unit}</th>
+                  <th>{isBoolean ? t('trackerExtra.valueTypeBoolean') : unit}</th>
                   <th>{t('trackerHistory.colNotes')}</th>
                   <th></th>
                 </tr>
@@ -169,7 +177,7 @@ export default function TrackerHistory({ title, table, valueField, unit, accentC
                 {visibleLogs.map((entry) => (
                   <tr key={entry.id}>
                     <td>{formatDate(entry.log_date)}</td>
-                    <td>{Number(entry[valueField]).toFixed(2)}</td>
+                    <td>{formatValue(entry)}</td>
                     <td className="history-notes-cell">{entry.notes || '—'}</td>
                     <td>
                       <button

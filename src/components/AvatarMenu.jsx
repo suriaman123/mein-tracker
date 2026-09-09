@@ -91,12 +91,12 @@ export default function AvatarMenu() {
           </Link>
 
           <Link
-            to="/achievements"
+            to="/settings"
             className="avatar-dropdown-item"
             role="menuitem"
             onClick={() => setOpen(false)}
           >
-            {t('achievements.navLabel')}
+            {t('settingsPage.navLabel')}
           </Link>
 
           <button className="avatar-dropdown-item" role="menuitem" onClick={toggleTheme}>
