@@ -37,6 +37,7 @@ export default function CustomTrackerPage() {
       extraInsertFields={{ tracker_id: trackerId }}
       conflictTarget="tracker_id,log_date"
       valueType={tracker.value_type}
+      booleanQuestion={tracker.boolean_question}
     />
   )
 }

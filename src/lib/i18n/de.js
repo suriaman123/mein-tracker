@@ -264,4 +264,11 @@ export default {
     markedMsg: 'Heute als erledigt markiert.',
     unmarkedMsg: 'Markierung für heute entfernt.',
   },
+
+  trackerExtra2: {
+    booleanQuestionLabel: 'Fragetext (optional)',
+    booleanQuestionPlaceholder: 'z. B. Warst du im Fitnessstudio?',
+    viewAsChart: 'Diagramm',
+    viewAsCalendar: 'Kalender',
+  },
 }

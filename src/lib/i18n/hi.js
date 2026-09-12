@@ -263,4 +263,11 @@ export default {
     markedMsg: 'आज पूरा हुआ चिह्नित किया।',
     unmarkedMsg: 'आज की चिह्न हटाई गई।',
   },
+
+  trackerExtra2: {
+    booleanQuestionLabel: 'प्रश्न टेक्स्ट (वैकल्पिक)',
+    booleanQuestionPlaceholder: 'जैसे क्या आप जिम गए?',
+    viewAsChart: 'चार्ट',
+    viewAsCalendar: 'कैलेंडर',
+  },
 }

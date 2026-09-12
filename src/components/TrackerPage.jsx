@@ -9,6 +9,7 @@ import { useConfirm } from '../lib/ConfirmContext'
 import { saveLog, deleteLog } from '../lib/trackerCrud'
 import { CUSTOM_COLOR_PRESETS } from '../lib/colorPresets'
 import TrendChart from './TrendChart'
+import MonthCalendarGrid from './MonthCalendarGrid'
 import Layout from './Layout'
 import './TrackerPage.css'
 import './TrackerHistory.css'
@@ -42,6 +43,7 @@ export default function TrackerPage({
   extraInsertFields,
   conflictTarget,
   valueType = 'number',
+  booleanQuestion,
 }) {
   const { user } = useAuth()
   const stats = useMonthlyStats(table, valueField, extraFilter)
@@ -72,6 +74,7 @@ export default function TrackerPage({
   const [deletingId, setDeletingId] = useState(null)
   const [savedMessage, setSavedMessage] = useState('')
   const [quickAdding, setQuickAdding] = useState(null)
+  const [trendView, setTrendView] = useState(isBoolean ? 'calendar' : 'chart')
 
   // If we arrived here via the "Edit" button on the yearly history table,
   // prefill the form with that entry — works for any month, not just this one.
@@ -327,7 +330,7 @@ export default function TrackerPage({
                   checked={value === '1'}
                   onChange={(e) => setValue(e.target.checked ? '1' : '0')}
                 />
-                {t('trackerExtra.booleanQuestion')}
+                {booleanQuestion || t('trackerExtra.booleanQuestion')}
               </label>
             </div>
           ) : (
@@ -366,14 +369,42 @@ export default function TrackerPage({
 
         <div className="tracker-right-col">
           <div className="tracker-chart-card">
-            <h2>{t('tracker.thisMonthsTrend')}</h2>
-            <TrendChart
-              logs={stats.logs}
-              valueField={valueField}
-              unit={unit}
-              accentColor={ACCENT_COLORS[accentClass]}
-              emptyLabel={t('tracker.logForTrend')}
-            />
+            <div className="tracker-chart-card-header">
+              <h2>{t('tracker.thisMonthsTrend')}</h2>
+              {isBoolean && (
+                <div className="chart-view-toggle">
+                  <button
+                    type="button"
+                    className={`chart-view-btn${trendView === 'calendar' ? ' chart-view-active' : ''}`}
+                    onClick={() => setTrendView('calendar')}
+                  >
+                    {t('trackerExtra2.viewAsCalendar')}
+                  </button>
+                  <button
+                    type="button"
+                    className={`chart-view-btn${trendView === 'chart' ? ' chart-view-active' : ''}`}
+                    onClick={() => setTrendView('chart')}
+                  >
+                    {t('trackerExtra2.viewAsChart')}
+                  </button>
+                </div>
+              )}
+            </div>
+            {isBoolean && trendView === 'calendar' ? (
+              <MonthCalendarGrid
+                logs={stats.logs}
+                valueField={valueField}
+                accentColor={ACCENT_COLORS[accentClass]}
+              />
+            ) : (
+              <TrendChart
+                logs={stats.logs}
+                valueField={valueField}
+                unit={unit}
+                accentColor={ACCENT_COLORS[accentClass]}
+                emptyLabel={t('tracker.logForTrend')}
+              />
+            )}
           </div>
 
           <div className="tracker-list">

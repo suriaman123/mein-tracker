@@ -16,6 +16,7 @@ const emptyForm = {
   step: 1,
   color_key: CUSTOM_COLOR_PRESETS[0].key,
   value_type: 'number',
+  boolean_question: '',
 }
 
 export default function ManageTrackersSection() {
@@ -42,6 +43,7 @@ export default function ManageTrackersSection() {
       step: tracker.step,
       color_key: tracker.color_key,
       value_type: tracker.value_type || 'number',
+      boolean_question: tracker.boolean_question || '',
     })
     setError('')
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -73,6 +75,7 @@ export default function ManageTrackersSection() {
         step: 1,
         color_key: form.color_key,
         value_type: 'boolean',
+        boolean_question: form.boolean_question.trim() || null,
       }
     } else {
       if (!form.unit.trim()) {
@@ -212,6 +215,19 @@ export default function ManageTrackersSection() {
               </div>
             </div>
           </>
+        )}
+
+        {isBoolean && (
+          <div className="field">
+            <label htmlFor="ctBooleanQuestion">{t('trackerExtra2.booleanQuestionLabel')}</label>
+            <input
+              id="ctBooleanQuestion"
+              type="text"
+              value={form.boolean_question}
+              onChange={(e) => setForm({ ...form, boolean_question: e.target.value })}
+              placeholder={t('trackerExtra2.booleanQuestionPlaceholder')}
+            />
+          </div>
         )}
 
         <div className="field">

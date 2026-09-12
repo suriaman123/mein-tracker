@@ -262,4 +262,11 @@ export default {
     markedMsg: 'Marked today as done.',
     unmarkedMsg: 'Unmarked today.',
   },
+
+  trackerExtra2: {
+    booleanQuestionLabel: 'Question text (optional)',
+    booleanQuestionPlaceholder: 'e.g. Did you go to the gym?',
+    viewAsChart: 'Chart',
+    viewAsCalendar: 'Calendar',
+  },
 }

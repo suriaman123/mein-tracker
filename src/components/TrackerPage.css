@@ -285,3 +285,98 @@
   color: var(--ink);
   border-color: var(--card-accent, var(--accent));
 }
+
+.calendar-grid-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.calendar-grid-weekdays span {
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.calendar-grid-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.calendar-cell {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.calendar-cell-empty {
+  border: none;
+}
+
+.calendar-cell-today {
+  border-color: var(--text-muted);
+  border-style: dashed;
+}
+
+.calendar-cell-checked {
+  background: var(--accent-soft);
+  border-color: var(--card-accent, var(--accent));
+  color: var(--text);
+}
+
+.calendar-cell-day {
+  font-weight: 500;
+}
+
+.calendar-cell-mark {
+  font-size: 0.85rem;
+  color: var(--card-accent, var(--accent));
+  line-height: 1;
+}
+
+.tracker-chart-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.1rem;
+}
+
+.tracker-chart-card .tracker-chart-card-header h2 {
+  margin: 0;
+}
+
+.chart-view-toggle {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.chart-view-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 6px;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  font-family: var(--font-body);
+}
+
+.chart-view-btn:hover {
+  border-color: var(--accent);
+}
+
+.chart-view-active {
+  background: var(--accent-soft);
+  border-color: var(--card-accent, var(--accent));
+  color: var(--text);
+  font-weight: 600;
+}
