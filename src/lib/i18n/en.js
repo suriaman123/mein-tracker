@@ -255,4 +255,11 @@ export default {
     adherenceRate: 'Adherence rate',
     daysYes: '{count} days marked yes',
   },
+
+  booleanQuickAdd: {
+    markToday: 'Mark today ✓',
+    markedToday: '✓ Marked today',
+    markedMsg: 'Marked today as done.',
+    unmarkedMsg: 'Unmarked today.',
+  },
 }

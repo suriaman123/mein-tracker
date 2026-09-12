@@ -257,4 +257,11 @@ export default {
     adherenceRate: 'Erfüllungsrate',
     daysYes: '{count} Tage mit Ja markiert',
   },
+
+  booleanQuickAdd: {
+    markToday: 'Heute markieren ✓',
+    markedToday: '✓ Heute markiert',
+    markedMsg: 'Heute als erledigt markiert.',
+    unmarkedMsg: 'Markierung für heute entfernt.',
+  },
 }

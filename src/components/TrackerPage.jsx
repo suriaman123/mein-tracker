@@ -181,6 +181,40 @@ export default function TrackerPage({
     setTimeout(() => setSavedMessage(''), 5000)
   }
 
+  async function handleBooleanQuickToggle() {
+    setError('')
+    setQuickAdding('boolean-toggle')
+
+    const todayStr = today()
+    const existing = stats.logs.find((l) => l.log_date === todayStr)
+    const currentlyMarked = existing && Number(existing[valueField]) >= 1
+    const newValue = currentlyMarked ? 0 : 1
+
+    const { error } = await saveLog(table, {
+      userId: user.id,
+      logDate: todayStr,
+      valueField,
+      value: newValue,
+      notes: existing?.notes || '',
+      extraFields: extraInsertFields,
+      conflictTarget,
+    })
+
+    setQuickAdding(null)
+
+    if (error) {
+      setError(error.message)
+      return
+    }
+
+    stats.refresh()
+    streakInfo.refresh()
+    setSavedMessage(
+      currentlyMarked ? t('booleanQuickAdd.unmarkedMsg') : t('booleanQuickAdd.markedMsg')
+    )
+    setTimeout(() => setSavedMessage(''), 5000)
+  }
+
   async function handleDelete(id, dateLabel) {
     const confirmed = await confirm(t('tracker.deleteConfirm', { date: dateLabel }))
     if (!confirmed) return
@@ -198,6 +232,8 @@ export default function TrackerPage({
   }
 
   const existingEntryForDate = stats.logs.find((l) => l.log_date === logDate)
+  const todayEntry = stats.logs.find((l) => l.log_date === today())
+  const todayMarked = todayEntry && Number(todayEntry[valueField]) >= 1
 
   return (
     <Layout>
@@ -224,6 +260,23 @@ export default function TrackerPage({
 
       <div className={`tracker-layout ${accentClass}`}>
         <div className="tracker-form-col">
+          {isBoolean && (
+            <div className="quick-add-row">
+              <button
+                type="button"
+                className={`quick-add-btn boolean-toggle-btn${todayMarked ? ' boolean-toggle-active' : ''}`}
+                disabled={quickAdding !== null}
+                onClick={handleBooleanQuickToggle}
+              >
+                {quickAdding === 'boolean-toggle'
+                  ? '…'
+                  : todayMarked
+                    ? t('booleanQuickAdd.markedToday')
+                    : t('booleanQuickAdd.markToday')}
+              </button>
+            </div>
+          )}
+
           {quickAddSteps.length > 0 && (
             <div className="quick-add-row">
               <span className="quick-add-label">{t('tracker.quickAddLabel')}</span>

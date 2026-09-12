@@ -256,4 +256,11 @@ export default {
     adherenceRate: 'पालन दर',
     daysYes: '{count} दिन हां चिह्नित',
   },
+
+  booleanQuickAdd: {
+    markToday: 'आज चिह्नित करें ✓',
+    markedToday: '✓ आज चिह्नित किया',
+    markedMsg: 'आज पूरा हुआ चिह्नित किया।',
+    unmarkedMsg: 'आज की चिह्न हटाई गई।',
+  },
 }
