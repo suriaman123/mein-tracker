@@ -269,4 +269,12 @@ export default {
     viewAsChart: 'Chart',
     viewAsCalendar: 'Calendar',
   },
+
+  periodToggle: {
+    thisMonth: 'This month',
+    thisWeek: 'This week',
+    noEntriesWeek: 'No entries yet this week.',
+    weekAverageOne: "This week's average: {avg} {unit} over {count} entry.",
+    weekAverageMany: "This week's average: {avg} {unit} over {count} entries.",
+  },
 }

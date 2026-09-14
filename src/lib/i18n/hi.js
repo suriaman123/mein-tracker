@@ -270,4 +270,12 @@ export default {
     viewAsChart: 'चार्ट',
     viewAsCalendar: 'कैलेंडर',
   },
+
+  periodToggle: {
+    thisMonth: 'इस महीने',
+    thisWeek: 'इस सप्ताह',
+    noEntriesWeek: 'इस सप्ताह अभी तक कोई प्रविष्टि नहीं।',
+    weekAverageOne: 'इस सप्ताह का औसत: {count} प्रविष्टि में {avg} {unit}।',
+    weekAverageMany: 'इस सप्ताह का औसत: {count} प्रविष्टियों में {avg} {unit}।',
+  },
 }

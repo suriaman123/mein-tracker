@@ -1,23 +1,5 @@
-import { useCallback, useEffect, useState } from 'react'
-import { useAuth } from './AuthContext'
-import { listCustomTrackers } from './customTrackers'
-
-export function useCustomTrackers() {
-  const { user } = useAuth()
-  const [trackers, setTrackers] = useState([])
-  const [loading, setLoading] = useState(true)
-
-  const refresh = useCallback(async () => {
-    if (!user) return
-    setLoading(true)
-    const { data } = await listCustomTrackers(user.id)
-    setTrackers(data)
-    setLoading(false)
-  }, [user])
-
-  useEffect(() => {
-    refresh()
-  }, [refresh])
-
-  return { trackers, loading, refresh }
-}
+// Re-exported from the shared context so every consumer (nav bar,
+// dashboard, achievements, settings) sees the same live list — editing
+// a tracker in Settings now shows up everywhere immediately, without a
+// page reload. See CustomTrackersContext.jsx for the actual implementation.
+export { useCustomTrackers } from './CustomTrackersContext'

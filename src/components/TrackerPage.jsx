@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../lib/AuthContext'
 import { useMonthlyStats } from '../lib/useMonthlyStats'
+import { useWeeklyStats } from '../lib/useWeeklyStats'
 import { useStreak } from '../lib/useStreak'
 import { useProfile } from '../lib/useProfile'
 import { useLanguage } from '../lib/LanguageContext'
@@ -9,7 +10,7 @@ import { useConfirm } from '../lib/ConfirmContext'
 import { saveLog, deleteLog } from '../lib/trackerCrud'
 import { CUSTOM_COLOR_PRESETS } from '../lib/colorPresets'
 import TrendChart from './TrendChart'
-import MonthCalendarGrid from './MonthCalendarGrid'
+import PeriodCalendarGrid from './PeriodCalendarGrid'
 import Layout from './Layout'
 import './TrackerPage.css'
 import './TrackerHistory.css'
@@ -47,6 +48,7 @@ export default function TrackerPage({
 }) {
   const { user } = useAuth()
   const stats = useMonthlyStats(table, valueField, extraFilter)
+  const weeklyStats = useWeeklyStats(table, valueField, extraFilter)
   const streakInfo = useStreak(table, extraFilter)
   const { profile } = useProfile()
   const { t, locale } = useLanguage()
@@ -54,6 +56,11 @@ export default function TrackerPage({
   const location = useLocation()
   const navigate = useNavigate()
   const isBoolean = valueType === 'boolean'
+  const [period, setPeriod] = useState('month')
+  // Displayed stats follow the period toggle; form logic (existing-entry
+  // detection, quick-add totals) always uses monthly `stats`, since "today"
+  // is always within the current month regardless of which view is shown.
+  const displayStats = period === 'week' ? weeklyStats : stats
 
   function formatDate(dateStr) {
     return new Date(dateStr + 'T00:00:00').toLocaleDateString(locale, {
@@ -141,6 +148,7 @@ export default function TrackerPage({
     const savedDateLabel = formatDate(logDate)
     resetForm()
     stats.refresh()
+    weeklyStats.refresh()
     streakInfo.refresh()
 
     setSavedMessage(
@@ -177,6 +185,7 @@ export default function TrackerPage({
     }
 
     stats.refresh()
+    weeklyStats.refresh()
     streakInfo.refresh()
     setSavedMessage(
       t('tracker.quickAddedTotal', { step, unit, total: newValue.toFixed(2) })
@@ -211,6 +220,7 @@ export default function TrackerPage({
     }
 
     stats.refresh()
+    weeklyStats.refresh()
     streakInfo.refresh()
     setSavedMessage(
       currentlyMarked ? t('booleanQuickAdd.unmarkedMsg') : t('booleanQuickAdd.markedMsg')
@@ -231,6 +241,7 @@ export default function TrackerPage({
       return
     }
     stats.refresh()
+    weeklyStats.refresh()
     streakInfo.refresh()
   }
 
@@ -244,21 +255,50 @@ export default function TrackerPage({
         <div>
           <h1>{title}</h1>
           <p>
-            {stats.count === 0
-              ? t('tracker.noEntriesMonth')
-              : t(stats.count === 1 ? 'tracker.monthAverageOne' : 'tracker.monthAverageMany', {
-                  avg: isBoolean ? (stats.average * 100).toFixed(0) : stats.average.toFixed(1),
-                  unit: isBoolean ? '%' : unit,
-                  count: stats.count,
-                })}
+            {displayStats.count === 0
+              ? period === 'week'
+                ? t('periodToggle.noEntriesWeek')
+                : t('tracker.noEntriesMonth')
+              : t(
+                  period === 'week'
+                    ? displayStats.count === 1
+                      ? 'periodToggle.weekAverageOne'
+                      : 'periodToggle.weekAverageMany'
+                    : displayStats.count === 1
+                      ? 'tracker.monthAverageOne'
+                      : 'tracker.monthAverageMany',
+                  {
+                    avg: isBoolean ? (displayStats.average * 100).toFixed(0) : displayStats.average.toFixed(1),
+                    unit: isBoolean ? '%' : unit,
+                    count: displayStats.count,
+                  }
+                )}
             {streakInfo.streak > 0 && t('tracker.streakSuffix', { count: streakInfo.streak })}
           </p>
         </div>
-        {historyPath && (
-          <Link to={historyPath} className="history-btn">
-            {t('tracker.seeAllData')}
-          </Link>
-        )}
+        <div className="history-header-actions">
+          <div className="chart-view-toggle">
+            <button
+              type="button"
+              className={`chart-view-btn${period === 'month' ? ' chart-view-active' : ''}`}
+              onClick={() => setPeriod('month')}
+            >
+              {t('periodToggle.thisMonth')}
+            </button>
+            <button
+              type="button"
+              className={`chart-view-btn${period === 'week' ? ' chart-view-active' : ''}`}
+              onClick={() => setPeriod('week')}
+            >
+              {t('periodToggle.thisWeek')}
+            </button>
+          </div>
+          {historyPath && (
+            <Link to={historyPath} className="history-btn">
+              {t('tracker.seeAllData')}
+            </Link>
+          )}
+        </div>
       </div>
 
       <div className={`tracker-layout ${accentClass}`}>
@@ -371,34 +411,34 @@ export default function TrackerPage({
           <div className="tracker-chart-card">
             <div className="tracker-chart-card-header">
               <h2>{t('tracker.thisMonthsTrend')}</h2>
-              {isBoolean && (
-                <div className="chart-view-toggle">
-                  <button
-                    type="button"
-                    className={`chart-view-btn${trendView === 'calendar' ? ' chart-view-active' : ''}`}
-                    onClick={() => setTrendView('calendar')}
-                  >
-                    {t('trackerExtra2.viewAsCalendar')}
-                  </button>
-                  <button
-                    type="button"
-                    className={`chart-view-btn${trendView === 'chart' ? ' chart-view-active' : ''}`}
-                    onClick={() => setTrendView('chart')}
-                  >
-                    {t('trackerExtra2.viewAsChart')}
-                  </button>
-                </div>
-              )}
+              <div className="chart-view-toggle">
+                <button
+                  type="button"
+                  className={`chart-view-btn${trendView === 'calendar' ? ' chart-view-active' : ''}`}
+                  onClick={() => setTrendView('calendar')}
+                >
+                  {t('trackerExtra2.viewAsCalendar')}
+                </button>
+                <button
+                  type="button"
+                  className={`chart-view-btn${trendView === 'chart' ? ' chart-view-active' : ''}`}
+                  onClick={() => setTrendView('chart')}
+                >
+                  {t('trackerExtra2.viewAsChart')}
+                </button>
+              </div>
             </div>
-            {isBoolean && trendView === 'calendar' ? (
-              <MonthCalendarGrid
-                logs={stats.logs}
+            {trendView === 'calendar' ? (
+              <PeriodCalendarGrid
+                logs={displayStats.logs}
                 valueField={valueField}
                 accentColor={ACCENT_COLORS[accentClass]}
+                valueType={valueType}
+                period={period}
               />
             ) : (
               <TrendChart
-                logs={stats.logs}
+                logs={displayStats.logs}
                 valueField={valueField}
                 unit={unit}
                 accentColor={ACCENT_COLORS[accentClass]}
@@ -410,13 +450,13 @@ export default function TrackerPage({
           <div className="tracker-list">
             <h2>{t('tracker.entriesHeading')}</h2>
 
-            {stats.loading ? (
+            {displayStats.loading ? (
               <p className="tracker-empty">{t('tracker.loading')}</p>
-            ) : stats.logs.length === 0 ? (
+            ) : displayStats.logs.length === 0 ? (
               <p className="tracker-empty">{t('tracker.nothingLogged')}</p>
             ) : (
               <ul className="log-list">
-                {stats.logs.map((entry) => (
+                {displayStats.logs.map((entry) => (
                   <li key={entry.id} className="log-row">
                     <div className="log-row-main">
                       <span className="log-date">{formatDate(entry.log_date)}</span>

@@ -271,4 +271,12 @@ export default {
     viewAsChart: 'Diagramm',
     viewAsCalendar: 'Kalender',
   },
+
+  periodToggle: {
+    thisMonth: 'Dieser Monat',
+    thisWeek: 'Diese Woche',
+    noEntriesWeek: 'Diese Woche noch keine Einträge.',
+    weekAverageOne: 'Durchschnitt diese Woche: {avg} {unit} über {count} Eintrag.',
+    weekAverageMany: 'Durchschnitt diese Woche: {avg} {unit} über {count} Einträge.',
+  },
 }

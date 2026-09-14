@@ -6,6 +6,7 @@ import { ThemeProvider } from './lib/ThemeContext'
 import { HiddenModeProvider } from './lib/HiddenModeContext'
 import { LanguageProvider } from './lib/LanguageContext'
 import { ConfirmProvider } from './lib/ConfirmContext'
+import { CustomTrackersProvider } from './lib/CustomTrackersContext'
 import './index.css'
 import App from './App.jsx'
 
@@ -21,9 +22,11 @@ createRoot(document.getElementById('root')).render(
         <HiddenModeProvider>
           <HashRouter>
             <AuthProvider>
-              <ConfirmProvider>
-                <App />
-              </ConfirmProvider>
+              <CustomTrackersProvider>
+                <ConfirmProvider>
+                  <App />
+                </ConfirmProvider>
+              </CustomTrackersProvider>
             </AuthProvider>
           </HashRouter>
         </HiddenModeProvider>

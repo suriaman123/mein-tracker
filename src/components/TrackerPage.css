@@ -333,6 +333,25 @@
   color: var(--text);
 }
 
+.calendar-cell-crossed {
+  background: rgba(217, 119, 87, 0.08);
+  border-color: var(--error);
+  color: var(--text-muted);
+}
+
+.calendar-cell-crossed .calendar-cell-mark {
+  color: var(--error);
+}
+
+.calendar-grid-days-week {
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar-grid-days-week .calendar-cell {
+  aspect-ratio: auto;
+  min-height: 64px;
+}
+
 .calendar-cell-day {
   font-weight: 500;
 }
