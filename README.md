@@ -1,16 +1,49 @@
-# React + Vite
+# Mein Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A personal habit tracker for sleep, water, and study — plus any custom
+tracker you want to add. Free forever, hosted on GitHub Pages, backed by
+Supabase.
 
-Currently, two official plugins are available:
+**Live app:** https://suriaman123.github.io/mein-tracker/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- Email/password login (Supabase Auth — passwords properly hashed, never
+  handled in plaintext)
+- Sleep, water, and study trackers: log, edit, delete, monthly average,
+  streaks
+- Create your own trackers — numeric (e.g. mood 1–10) or Yes/No (e.g. gym)
+- Dashboard overview with goals, progress bars, and streaks
+- Monthly and weekly views, with a chart or calendar-grid view for each
+  tracker
+- Yearly history per tracker with CSV export, filtering, and sorting
+- Achievements: personal bests, longest streaks, badges
+- Profile with photo, personal details, and daily goals
+- Full data export/backup as JSON
+- Installable as a PWA (works offline for cached views)
+- Dark and light mode
+- English, German, and Hindi
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech stack
 
-## Expanding the Oxlint configuration
+- React + Vite
+- Supabase (Postgres, Auth, Storage) for the backend
+- Recharts for charts
+- Deployed to GitHub Pages via `gh-pages`
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+
+
+### Local setup
+
+```bash
+npm install
+cp .env.example .env   # fill in your Supabase URL and anon key
+npm run dev
+```
+
+Run the SQL files in `schema*.sql` (in order) against your own Supabase
+project before first use.
+
+
+
+`create by suriaman123 and Claude.ai `
